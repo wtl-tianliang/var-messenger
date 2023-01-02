@@ -8,22 +8,30 @@
 <script setup>
 /* eslint-disable */
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
-
-import { onBeforeUnmount, ref, shallowRef, onMounted, nextTick } from "vue";
+import { onMounted } from "vue";
 import { createEditor, createToolbar } from "@wangeditor/editor";
 
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
+
 const editorConfig = {
-  placeholder: "Type here...",
+  placeholder: "在此输入内容",
   onChange(editor) {
     const html = editor.getHtml();
-    console.log("editor content", html);
+    emit('update:modelValue', html)
   },
+  MENU_CONF: {
+    uploadImage: {
+      base64LimitSize: Infinity
+    }
+  }
 };
 
-nextTick(() => {
+onMounted(() => {
+  const value = props.modelValue
   const editor = createEditor({
     selector: "#editor-container",
-    html: "<p><br></p>",
+    html: value,
     config: editorConfig,
     mode: "default", // or 'simple'
   });
@@ -39,8 +47,6 @@ nextTick(() => {
     mode: "default", // or 'simple'
   });
 
-  const config = toolbar.getConfig()
-  console.log(editor, config);
 });
 </script>
 
@@ -53,6 +59,6 @@ nextTick(() => {
   border-bottom: 1px solid #ccc;
 }
 #editor-container {
-  height: 500px;
+  height: 400px;
 }
 </style>
