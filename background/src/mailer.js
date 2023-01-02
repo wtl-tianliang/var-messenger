@@ -12,6 +12,7 @@ export function verifyConnection(option = {}) {
   transporter = nodemailer.createTransport({
     host: host,
     port: port,
+    secure: true,
     auth: {
       type: "login",
       user: username,
