@@ -1,51 +1,74 @@
 <template>
   <div class="home">
-    <p @click="send">send mail</p>
-    <input type="file" @change="handleChange" />
-    <router-link to="/app">to app</router-link>
+    <el-form :model="form" class="form" label-width="100" label-position="left">
+      <el-form-item label="服务器地址">
+        <el-input v-model="form.host"></el-input>
+      </el-form-item>
+      <el-form-item label="服务器端口">
+        <el-input v-model="form.port"></el-input>
+      </el-form-item>
+      <el-form-item label="用户名">
+        <el-input v-model="form.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="form.password" type="password"></el-input>
+      </el-form-item>
+      <el-button type="primary" style="width: 100%" @click="toLogin"
+        >登录</el-button
+      >
+    </el-form>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { RouterLink } from 'vue-router'
+import { reactive } from "vue";
 import { ipcRenderer } from "electron";
+import { ElMessage } from "element-plus";
+import router from '@/router/index'
 
-const origin = {};
+const form = reactive({
+  host: "",
+  port: 465,
+  username: "",
+  password: "",
+});
 
-const file = ref(origin);
-
-const send = () => {
-  console.log(file.value.path, file.value.name)
-  ipcRenderer.send("test", {
-    attachments: [
-      {
-        filename: file.value.name,
-        path: file.value.path,
-      },
-    ],
-  });
-};
-const handleChange = (e) => {
-  const temp = e.target.files[0];
-  file.value = {
-    path: temp.path,
-    name: temp.name
-  };
+const toLogin = () => {
+  ipcRenderer
+    .invoke("verifyConnection", {
+      host: form.host,
+      port: form.port,
+      username: form.username,
+      password: form.password,
+    })
+    .then(({ type, message }) => {
+      if (type === "success") {
+        router.push('/definedata')
+      } else {
+        ElMessage({ type, message });
+      }
+    })
+    .catch((err) => {
+      ElMessage.error({
+        message: "未知异常",
+      });
+    });
 };
 </script>
 
 <script>
 export default {
-  name: 'ViewHome'
-}
+  name: "ViewHome",
+};
 </script>
 
 <style lang="scss" scoped>
 .home {
-  background-color: aquamarine;
-  p {
-    font-size: 14px;
-  }
+  display: flex;
+  flex-direction: column;
+}
+.form {
+  width: 400px;
+  margin: 20px auto 0 auto;
 }
 </style>

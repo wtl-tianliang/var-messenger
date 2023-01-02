@@ -1,6 +1,8 @@
 {
-  "name": "mailer-x",
+  "name": "messenger",
   "version": "0.1.0",
+  "description": "Use variables to send mail in batches",
+  "author": "wwwszsxcn@hotmail.com",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,12 +15,19 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^1.0.2",
+    "canvas-datagrid": "^0.4.5",
     "core-js": "^3.8.3",
     "electron-builder": "^23.3.3",
+    "element-plus": "^2.2.25",
+    "lodash": "^4.17.21",
+    "nodemailer": "^6.8.0",
+    "uuid": "^9.0.0",
     "vue": "^3.2.13",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.1/xlsx-0.19.1.tgz"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -26,15 +35,12 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "browserify-fs": "^1.0.0",
     "electron": "^21.1.0",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "node-sass": "^4.14.1",
-    "path-browserify": "^1.0.1",
+    "sass": "^1.57.1",
     "sass-loader": "^8.0.2",
-    "stream-browserify": "^3.0.0",
     "vue-cli-plugin-electron-builder": "~2.1.1"
   },
   "eslintConfig": {

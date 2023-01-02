@@ -1,8 +1,12 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain} from 'electron'
+import { app, protocol, BrowserWindow, screen, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+// eslint-disable-next-line no-unused-vars
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+
+import '../background/main.js'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -11,9 +15,15 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
+  const display = screen.getDisplayNearestPoint(screen.getCursorScreenPoint())  
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: Math.min(display.workAreaSize.width * 0.8, 1200),
+    height: Math.min(display.workAreaSize.height * 0.8, 800),
+    maxWidth: 1200,
+    maxHeight: 900,
+    minWidth: 800,
+    minHeight: 600,
+    center: true,
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -23,6 +33,7 @@ async function createWindow() {
     }
   })
 
+  Menu.setApplicationMenu(null)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -53,14 +64,14 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS3_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
-  }
+  // if (isDevelopment && !process.env.IS_TEST) {
+  //   // Install Vue Devtools
+  //   try {
+  //     await installExtension(VUEJS3_DEVTOOLS)
+  //   } catch (e) {
+  //     console.error('Vue Devtools failed to install:', e.toString())
+  //   }
+  // }
   createWindow()
 })
 
@@ -78,7 +89,3 @@ if (isDevelopment) {
     })
   }
 }
-
-ipcMain.on('test', () => {
-  console.log('test')
-})
