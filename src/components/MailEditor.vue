@@ -18,6 +18,7 @@ const editorConfig = {
   placeholder: "在此输入内容",
   onChange(editor) {
     const html = editor.getHtml();
+    console.log(html)
     emit('update:modelValue', html)
   },
   MENU_CONF: {
