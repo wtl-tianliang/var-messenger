@@ -8,16 +8,26 @@ const router = createRouter({
       component: () => import('../views/Home.vue')
     },
     {
-      path: '/definedata',
-      component: () => import('../views/DataDefine.vue')
+      path: '/steps',
+      component: () => import('../views/Steps/index.vue'),
+      children: [
+        {
+          path: 'definedata',
+          component: () => import('../views/DataDefine.vue')
+        },
+        {
+          path: 'preview',
+          component: () => import('../views/PreviewMail.vue')
+        },
+        {
+          path: 'editor',
+          component: () => import('../views/Editor.vue')
+        },
+      ]
     },
     {
-      path: '/preview',
-      component: () => import('../views/PreviewMail.vue')
-    },
-    {
-      path: '/editor',
-      component: () => import('../views/Editor.vue')
+      path: '/test',
+      component: () => import('../views/Test.vue')
     }
   ]
 })

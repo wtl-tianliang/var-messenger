@@ -1,0 +1,121 @@
+{
+  "id": "3864570",
+  "name": "Var messenger",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "372275",
+      "name": "cc-write",
+      "font_class": "cc-write",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
+      "icon_id": "4074109",
+      "name": "var",
+      "font_class": "var",
+      "unicode": "e772",
+      "unicode_decimal": 59250
+    },
+    {
+      "icon_id": "27479701",
+      "name": "send",
+      "font_class": "send1",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "11792257",
+      "name": "mail",
+      "font_class": "mail",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "11792266",
+      "name": "trash",
+      "font_class": "trash",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "15186442",
+      "name": "shut",
+      "font_class": "shut",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "17532481",
+      "name": "maximize",
+      "font_class": "maximize",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "17532483",
+      "name": "minimize",
+      "font_class": "minimize",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "17532517",
+      "name": "full_screen",
+      "font_class": "full_screen",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "17782158",
+      "name": "attachment",
+      "font_class": "attachment",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "20426183",
+      "name": "send",
+      "font_class": "send",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "1898720",
+      "name": "eye",
+      "font_class": "eye",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "6664158",
+      "name": "eye",
+      "font_class": "eye1",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "32477",
+      "name": "delete",
+      "font_class": "delete",
+      "unicode": "e6b4",
+      "unicode_decimal": 59060
+    },
+    {
+      "icon_id": "4579855",
+      "name": "login",
+      "font_class": "login",
+      "unicode": "e953",
+      "unicode_decimal": 59731
+    },
+    {
+      "icon_id": "9769247",
+      "name": "config",
+      "font_class": "config",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    }
+  ]
+}

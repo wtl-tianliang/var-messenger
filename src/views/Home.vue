@@ -1,59 +1,139 @@
 <template>
   <div class="home">
-    <el-form :model="form" class="form" label-width="100" label-position="left">
-      <el-form-item label="服务器地址">
-        <el-input v-model="form.host"></el-input>
-      </el-form-item>
-      <el-form-item label="服务器端口">
-        <el-input v-model="form.port"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名">
-        <el-input v-model="form.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="form.password" type="password"></el-input>
-      </el-form-item>
-      <el-button type="primary" style="width: 100%" @click="toLogin"
-        >登录</el-button
+    <div class="container">
+      <div class="history-login">
+        <div class="header">
+          <div class="title">登录历史</div>
+        </div>
+        <template v-for="(item, index) in histories" :key="item.id">
+          <div class="login-item">
+            <img class="logo" src="../assets/icon.png" />
+            <div class="info">
+              <div class="name" :title="item.username">{{ item.username }}</div>
+              <div class="smtp" :title="item.smtp">
+                {{ item.smtp }}:{{ item.smtp_port }}
+              </div>
+            </div>
+            <div class="operate">
+              <span
+                title="登录"
+                class="iconfont icon-login"
+                @click="handleLogin(item)"
+              ></span>
+              <span
+                title="配置"
+                class="iconfont icon-config"
+                @click="handleConfig(item)"
+              ></span>
+              <span
+                title="删除"
+                class="iconfont icon-delete"
+                @click="handleDelete(item, index)"
+              ></span>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <el-form
+        :model="form"
+        class="form"
+        label-width="100"
+        label-position="left"
       >
-    </el-form>
+        <h2>登录邮箱</h2>
+        <el-form-item label="服务器地址">
+          <el-input v-model="form.host"></el-input>
+        </el-form-item>
+        <el-form-item label="服务器端口">
+          <el-input v-model="form.port"></el-input>
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="form.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="form.password" :type="passStatus">
+            <template #suffix>
+              <i class="view-pass iconfont" :class="passStatus === 'password' ? 'icon-eye1' : 'icon-eye'" @click="handleViewPass"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label-width="0">
+          <el-checkbox v-model="form.useSecure">启用安全连接</el-checkbox>
+        </el-form-item>
+        <el-button round type="primary" style="width: 100%" @click="toLogin" :loading="isLogin">
+          登录
+        </el-button>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { ipcRenderer } from "electron";
 import { ElMessage } from "element-plus";
-import router from '@/router/index'
+import router from "@/router/index";
 
-const form = reactive({
-  host: "",
-  port: 465,
-  username: "",
-  password: "",
+const form = reactive({ host: "", port: "", username: "", password: "" });
+const histories = ref([]);
+const passStatus = ref("password");
+const isLogin = ref(false);
+
+function handleViewPass() {
+  if (passStatus.value === "password") {
+    passStatus.value = "text";
+  } else {
+    passStatus.value = "password";
+  }
+}
+
+onMounted(async () => {
+  const list = await ipcRenderer.invoke("getLogin");
+  histories.value = list;
 });
 
-const toLogin = () => {
-  ipcRenderer
-    .invoke("verifyConnection", {
+async function toLogin() {
+  try {
+    isLogin.value = true;
+    const login = await ipcRenderer.invoke("verifyConnection", {
       host: form.host,
       port: form.port,
       username: form.username,
       password: form.password,
-    })
-    .then(({ type, message }) => {
-      if (type === "success") {
-        router.push('/definedata')
-      } else {
-        ElMessage({ type, message });
-      }
-    })
-    .catch((err) => {
-      ElMessage.error({
-        message: "未知异常",
-      });
+      useSecure: form.useSecure,
     });
-};
+
+    const { type, message } = login;
+    if (type === "success") {
+      isLogin.value = false;
+      router.push("/steps/definedata");
+    } else {
+      isLogin.value = false;
+      ElMessage({ type, message });
+    }
+  } catch (err) {
+    isLogin.value = false;
+    ElMessage.error({ message: "未知异常" });
+  }
+}
+
+function handleConfig(config) {
+  form.host = config.smtp;
+  form.port = config.smtp_port;
+  form.username = config.username;
+  form.password = config.password;
+  form.useSecure = config.use_secure === 1;
+}
+
+function handleLogin(config) {
+  handleConfig(config);
+  toLogin();
+}
+
+function handleDelete(config, index) {
+  this.histories.splice(index, 1);
+}
 </script>
 
 <script>
@@ -66,9 +146,80 @@ export default {
 .home {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  height: calc(100% - 41px);
 }
-.form {
-  width: 400px;
-  margin: 20px auto 0 auto;
+.container {
+  display: flex;
+  height: 100%;
+  .history-login {
+    width: 300px;
+    overflow: auto;
+    border-right: 1px solid #dfdfdf;
+    .header {
+      .title {
+        font-weight: bold;
+        font-size: 14px;
+        padding: 8px 0 0 8px;
+      }
+    }
+  }
+  .login-item {
+    display: flex;
+    border: 1px dashed #cecece;
+    padding: 8px;
+    margin: 8px;
+    align-items: center;
+    .logo {
+      width: 40px;
+      height: 40px;
+      margin-right: 8px;
+    }
+    .info {
+      flex: 1;
+      width: 0;
+      padding-right: 8px;
+      .name {
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-bottom: 6px;
+      }
+      .smtp {
+        font-size: 12px;
+        color: #aaa;
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+    .operate {
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px dotted #ccc;
+      padding-left: 6px;
+      .iconfont {
+        cursor: pointer;
+      }
+      .iconfont:not(:last-child) {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .form {
+    width: 400px;
+    margin: 100px auto 0 auto;
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .view-pass {
+      cursor: pointer;
+    }
+  }
 }
 </style>
