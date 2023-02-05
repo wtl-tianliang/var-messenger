@@ -46,22 +46,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="附件">
-            <el-select
-              placeholder="请选择要引用的变量"
-              clearable
-              v-model="form.filePath"
-              style="width: 100%"
-            >
-              <el-option
-                v-for="variable in vars"
-                :key="variable.label"
-                :value="variable.label"
-                :label="variable.label"
-              >
-                {{ variable.label }}
-              </el-option>
-            </el-select>
-            <el-checkbox v-model="form.contentAsDocx">将邮件正文作为 .docx 附件</el-checkbox>
+            <file-picker v-model="form.filePath">
+              <template #append>
+                <el-checkbox v-model="form.contentAsDocx">将邮件正文作为 .docx 附件</el-checkbox>
+              </template>
+            </file-picker>
           </el-form-item>
         </el-form>
       </div>
@@ -80,7 +69,10 @@
 import Editor from "@/components/MailEditor.vue";
 import { ref, reactive, onMounted, watch } from "vue";
 import { ipcRenderer } from "electron";
-import router from "../router/index.js";
+import { useRouter } from "vue-router";
+import FilePicker from "./components/FilePicker.vue";
+
+const router = useRouter()
 
 const form = reactive({
   title: "",

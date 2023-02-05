@@ -21,10 +21,7 @@ let defineVarsMap = {};
 let isHasTitle = false;
 const letters = [];
 let excelPath = "";
-let form = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "form.json"), { encoding: "utf-8" })
-);
-// let form = {}
+let form = {}
 
 ipcMain.handle("setHasTitle", (event, data) => {
   isHasTitle = data;

@@ -21,7 +21,7 @@ const router = createRouter({
         },
         {
           path: 'editor',
-          component: () => import('../views/Editor.vue')
+          component: () => import('../views/EditorPage/index.vue')
         },
       ]
     },
