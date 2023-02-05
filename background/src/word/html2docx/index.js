@@ -1,17 +1,12 @@
-const { parser } = require("posthtml-parser");
-const { createDocument } = require("./translator");
-const fs = require("fs");
+import { parser } from "posthtml-parser"
+import { createDocument } from "./translator.js"
 
 function html2Ast(html) {
   return parser(html, { lowerCaseTags: true });
 }
 
-async function genDocx(html) {
+export async function genDocx(html) {
+  html = `<section>${html}</section>`
   const ast = html2Ast(html);
-  const docx = await createDocument(ast);
-  fs.writeFileSync("./out.docx", docx);
+  return await createDocument(ast);
 }
-
-module.exports = {
-  genDocx,
-};

@@ -1,86 +1,92 @@
 <template>
-  <!-- uploader -->
   <div class="container">
-    <div class="var-list">
-      <div class="title">变量定义</div>
-      <div class="list">
-        <div
-          class="item"
-          v-for="(variable, index) in vars"
-          :key="variable.label"
-        >
-          <div class="name">{{ variable.label }}</div>
-          <div class="value-display">
-            <el-icon
-              :size="14"
-              class="target-handle"
-              :class="{ picking: pickTarget === variable }"
-              @click="setValue(variable)"
-            >
-              <Aim></Aim>
-            </el-icon>
-            <div class="value">{{ variable.value }}</div>
-            <el-icon
-              :size="14"
-              class="delete-handle"
-              v-if="variable.configable"
-              @click="removeVar(index)"
-            >
-              <Delete></Delete>
-            </el-icon>
-          </div>
+    <el-upload
+      class="uploader"
+      v-show="!isMountGrid"
+      ref="uploadRef"
+      :on-exceed="handleExceed"
+      :show-file-list="false"
+      accept=".xls,.xlsx"
+      drag
+      :limit="1"
+      :auto-upload="false"
+      :on-change="handleChange"
+    >
+      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+      <div class="el-upload__text">将文件拖放到这里或 <em>点击选择</em></div>
+      <template #tip>
+        <p class="description">
+          选择 Excel 文件作为数据源，支持 <em>.xls</em> 与 <em>.xlsx</em> 格式
+        </p>
+      </template>
+    </el-upload>
+
+    <div ref="gridwrap" class="grid-wrap" v-show="isMountGrid">
+      <div class="header">
+        <div class="front">
+          <el-button round @click="crateNewVar">
+            <el-icon :size="16"><Aim /></el-icon>
+            <span>
+              定义选中列
+              <small>{{ pickTarget || "R:C" }}</small>
+            </span>
+          </el-button>
+          <el-checkbox v-model="hasTitle">首行包含标题</el-checkbox>
         </div>
-      </div>
-      <div class="footer">
-        <el-button type="primary" class="create-btn" @click="crateNewVar"
-          >新建变量</el-button
+        <el-popover
+          placement="bottom-end"
+          width="400px"
+          :disabled="vars.length < 1"
         >
+          <template v-for="(variable, index) in vars" :key="variable.label">
+            <el-tag class="var-item" closable @close="handleRemoveVar(index)">{{
+              variable.label
+            }}</el-tag>
+          </template>
+          <template #reference>
+            <el-badge :value="vars.length">
+              <el-tag effect="plain">已定义变量</el-tag>
+            </el-badge>
+          </template>
+        </el-popover>
       </div>
+      <div class="data-grid" ref="datagridRef"></div>
     </div>
-    <div class="table">
-      <el-upload ref="uploadRef" :on-exceed="handleExceed" :show-file-list="false" accept=".xls,.xlsx" :limit="1" :auto-upload="false" :on-change="handleChange">
-        <template #trigger>
-          <div class="tip">
-            <el-button size="small" type="primary" style="margin-right:10px;">选择文件</el-button>
-            <el-checkbox @click.stop v-model="hasTitle" @change="handleTitleChange">首行包含标题</el-checkbox>
-          </div>
-        </template>
-      </el-upload>
-      <!-- sheet -->
-      <div class="data-grid" ref="datagridRef">
-        <p class="tip" v-if="!isMountGrid">请选择文件</p>
+
+    <Teleport to="#step-external">
+      <div class="operate-bar">
+        <el-button round type="primary" @click="toNext">下一步</el-button>
       </div>
-      <div class="footer">
-        <el-button type="success" @click="toWriteTemplate">下一步</el-button>
-      </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted } from "vue";
-import router from "@/router/index";
+import { ref, onBeforeUnmount, onMounted, watch } from "vue";
 import { ipcRenderer } from "electron";
+import { useRouter } from "vue-router";
 import canvasDatagrid from "canvas-datagrid";
 import { ElMessageBox, genFileId } from "element-plus";
 
+const router = useRouter();
+const gridwrap = ref(null);
 const datagridRef = ref();
 const uploadRef = ref();
-const pickTarget = ref(null);
+const pickTarget = ref("");
 const grids = [];
-const hasTitle = ref(false)
-const isMountGrid = ref(false)
+const hasTitle = ref(false);
+const isMountGrid = ref(false);
 
-function handleTitleChange(value) {
-  ipcRenderer.invoke('setHasTitle', value)
-}
+watch(hasTitle, (value) => {
+  ipcRenderer.invoke("setHasTitle", value);
+});
 
-const vars = ref([
-  { label: "`收件人`", value: "", configable: false },
-  { label: "`附件`", value: "", configable: false },
-]);
+const vars = ref([]);
 
 const crateNewVar = () => {
+  if (!pickTarget.value) {
+    return;
+  }
   ElMessageBox.prompt("请输入变量名", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -88,21 +94,19 @@ const crateNewVar = () => {
     inputErrorMessage: "变量名不能为空",
   })
     .then(({ value }) => {
-      vars.value.push({ label: `\`${value}\``, value: "", configable: true });
+      vars.value.push({ label: value, value: pickTarget.value });
+      setVars();
     })
     .catch(() => {});
 };
 
-const setValue = (variable) => {
-  pickTarget.value = variable;
-};
-
-const removeVar = (index) => {
+const handleRemoveVar = (index) => {
   vars.value.splice(index, 1);
+  setVars();
 };
 
 const mountGrid = (data) => {
-  isMountGrid.value = true
+  isMountGrid.value = true;
   const grid = canvasDatagrid({
     parentNode: datagridRef.value,
     data: data,
@@ -111,15 +115,23 @@ const mountGrid = (data) => {
     columnHeaderClickBehavior: "none",
   });
 
-  grid.style.height = "100%";
   grid.style.width = "100%";
+  grid.style.height = "100%";
+  grid.style.gridBackgroundColor = "#fff";
+  grid.style.cellHeight = 30;
   const handleClick = (e) => {
+    e.preventDefault();
     const { cell } = e;
-    if (cell.context !== "cell" || !pickTarget.value) {
-      return;
-    }
-    pickTarget.value.value = cell.gridId;
-    pickTarget.value = null;
+    const { index } = cell.header;
+    grid.selectArea({
+      top: 0,
+      left: index,
+      bottom: data.length,
+      right: index,
+    });
+    grid.draw();
+    pickTarget.value = `-1:${index}`;
+    return;
   };
 
   const handleContextMenu = (e) => {
@@ -152,126 +164,88 @@ function getVars() {
 }
 
 onMounted(() => {
-  ipcRenderer.invoke('getHasTitle').then((value) => {
-    hasTitle.value = value
-  })
-  getVars()
-  ipcRenderer.invoke('getExcelPath').then(path => {
+  ipcRenderer.invoke("getHasTitle").then((value) => {
+    hasTitle.value = value;
+  });
+  getVars();
+  ipcRenderer.invoke("getExcelPath").then((path) => {
     if (path) {
-      handleChange({raw: { path }})
+      handleChange({ raw: { path } });
     }
-  })
-})
+  });
+});
 
 const handleExceed = (files) => {
-  uploadRef.value.clearFiles()
-  const file = files[0]
-  file.uid = genFileId()
-  uploadRef.value.handleStart(file)
-}
+  uploadRef.value.clearFiles();
+  const file = files[0];
+  file.uid = genFileId();
+  uploadRef.value.handleStart(file);
+};
 
-function handleChange (file) {
+function handleChange(file) {
   ipcRenderer.invoke("parse-excel", file.raw.path).then((data) => {
     const grid = mountGrid(data);
     if (grids.length > 0) {
-      const clearLastGrid = grids.pop()
-      clearLastGrid()
+      const clearLastGrid = grids.pop();
+      clearLastGrid();
     }
     grids.push(grid);
   });
 }
 
-const toWriteTemplate = () => {
+const setVars = () => {
   const varsData = JSON.stringify(vars.value);
-  ipcRenderer.invoke("setVars", varsData).then(() => {
-    router.push("/editor");
-  });
+  ipcRenderer.invoke("setVars", varsData);
+};
+
+const toNext = () => {
+  router.push("/steps/editor");
 };
 </script>
 
 <style lang="scss" scoped>
-.data-grid {
-  position: relative;
-  flex: 1;
-  height: 0;
-  .tip {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: #ccc;
-  }
-}
-
-.container {
-  display: flex;
-  .var-list {
-    padding: 8px 4px;
-    width: 200px;
-    border-right: 1px dashed #ccc;
-    margin-right: 4px;
-    display: flex;
-    flex-direction: column;
-    .list {
-      flex: 1;
-      overflow: auto;
-      .name {
-        padding: 2px 4px;
-        background-color: var(--main-color);
-        color: #fff;
-        margin-top: 4px;
-      }
-    }
-    .create-btn {
-      width: 100%;
-    }
-  }
-  .table {
-    display: flex;
-    flex: 1;
-    width: 0;
-    padding: 8px;
-    flex-direction: column;
-    line-height: 0;
-    .footer {
-      text-align: right;
-    }
-  }
-}
-
-.tip {
-  display: flex;
-  align-items: center;
-}
-
-.value-display {
-  display: flex;
-  align-items: center;
-  height: 30px;
-  border: 1px solid #ccc;
-  font-size: 12px;
-  .target-handle,
-  .delete-handle {
-    width: 20px;
-    text-align: center;
-    color: #ccc;
-    cursor: pointer;
-    &:hover {
+.uploader {
+  margin: 40px;
+  .description {
+    font-size: 14px;
+    padding-top: 10px;
+    em {
       color: var(--main-color);
     }
   }
-  .target-handle {
-    &.picking {
-      color: var(--main-color);
+}
+
+.grid-wrap {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .header {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .front {
+    display: inherit;
+    align-items: center;
+    & > *:not(:first-child) {
+      margin-left: 8px;
     }
   }
-  .value {
+  .data-grid {
     flex: 1;
-    margin-left: 4px;
-    &:empty::after {
-      content: "未设置";
-      color: #ccc;
-    }
+    height: 0;
   }
+}
+
+.var-item {
+  margin: 4px;
+}
+
+.operate-bar {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
 }
 </style>

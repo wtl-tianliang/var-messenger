@@ -34,10 +34,15 @@ const { html } = toRefs(props)
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .content {
   min-height: 40vh;
   padding: 10px;
   border: 1px dashed #dedede;
+  font-size: 16px;
+  ::v-deep(.plugin-var-node:before),
+  ::v-deep(.plugin-var-node:after) {
+    content: "" !important;
+  }
 }
 </style>

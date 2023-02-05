@@ -1,34 +1,67 @@
 <template>
-  <router-view class="view" v-slot="{ Component }">
-    <keep-alive include="MailEditor">
-      <component :is="Component"></component>
-    </keep-alive>
+  <div class="header">
+    <img src="@/assets/icon.png" class="logo" />
+    <span class="login">{{ currentLogin }}</span>
+    <span class="logout" v-if="currentLogin">注销</span>
+  </div>
+  <router-view v-slot="{ Component }">
+    <component :is="Component"></component>
   </router-view>
 </template>
 
 <script setup>
-import { RouterView } from "vue-router";
+import { ref } from "vue";
+import { RouterView, useRouter } from "vue-router";
+import { ipcRenderer } from "electron";
+
+const currentLogin = ref('')
+ipcRenderer.on('loginSuccess', (event, data) => {
+  currentLogin.value = data
+})
+
+const router = useRouter();
+// eslint-disable-next-line no-unused-vars
+function goBack() {
+  router.back();
+}
 </script>
 
 <style lang="scss" scoped>
 .header {
-  height: 30px;
-  line-height: 30px;
-  background-color: var(--main-color);
+  height: 40px;
   padding: 0 10px;
-}
-.view {
-  flex: 1;
-  height: 0;
+  border-bottom: 1px solid #ccc;
+  -webkit-app-region: drag;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  background-color: #e8eaed;
+  .logo {
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin-right: 15px;
+  }
+  .login {
+    margin-right: 10px;
+  }
+  .logout {
+    color: var(--main-color);
+    cursor: pointer;
+    -webkit-app-region: none;
+  }
 }
 </style>
 
 <style lang="scss">
 * {
   outline: none;
-  text-decoration: none;
+}
+ul {
+  padding-inline-start: 20px;
 }
 :root {
   --main-color: var(--el-color-primary);
+  --global-margin: 15px;
 }
 </style>
