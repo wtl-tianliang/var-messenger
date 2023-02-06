@@ -48,7 +48,9 @@
           <el-form-item label="附件">
             <file-picker v-model="form.filePath">
               <template #append>
-                <el-checkbox v-model="form.contentAsDocx">将邮件正文作为 .docx 附件</el-checkbox>
+                <el-checkbox v-model="form.contentAsDocx"
+                  >将邮件正文作为 .docx 附件</el-checkbox
+                >
               </template>
             </file-picker>
           </el-form-item>
@@ -72,20 +74,20 @@ import { ipcRenderer } from "electron";
 import { useRouter } from "vue-router";
 import FilePicker from "./components/FilePicker.vue";
 
-const router = useRouter()
+const router = useRouter();
 
 const form = reactive({
   title: "",
   to: "",
   cc: "",
-  filePath: "",
+  filePath: [],
   html: "",
-  contentAsDocx: true
+  contentAsDocx: false,
 });
 
 watch(form, (data) => {
-  ipcRenderer.invoke('setForm', JSON.stringify(data))
-})
+  ipcRenderer.invoke("setForm", JSON.stringify(data));
+});
 
 const vars = ref([]);
 
@@ -94,8 +96,8 @@ function getData() {
     vars.value = data.map((item) => ({ ...item, label: `\`${item.label}\`` }));
   });
   ipcRenderer.invoke("getForm").then((data) => {
-    console.log(data)
-    Object.assign(form, data)
+    console.log(data);
+    Object.assign(form, data);
   });
 }
 
@@ -108,7 +110,6 @@ const toPreview = () => {
     router.push("/steps/preview");
   });
 };
-
 </script>
 
 <script>

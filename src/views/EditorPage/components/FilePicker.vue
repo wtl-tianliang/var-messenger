@@ -19,7 +19,7 @@
           </div>
         </el-tooltip>
       </template>
-  
+
       <div class="start" @click="startPick">
         <i class="iconfont icon-shut"></i>
       </div>
@@ -29,11 +29,22 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect, onBeforeUnmount } from "vue";
 import { v4 } from "uuid";
+
+const emit = defineEmits(["update:modelValue"]);
+const props = defineProps(["modelValue"]);
 
 const input = ref(null);
 const fileList = ref([]);
+
+const stop = watchEffect(() => {
+  fileList.value = props.modelValue;
+});
+
+onBeforeUnmount(() => {
+  stop && stop();
+});
 
 function handlePickFile({ target: { files } }) {
   const list = Array.from(files);
@@ -49,10 +60,12 @@ function handlePickFile({ target: { files } }) {
     };
     fileList.value.push(pickItem);
   });
+
+  emit("update:modelValue", fileList.value);
 }
 
 function handleRemoveFile(index) {
-  fileList.value.splice(index, 1)
+  fileList.value.splice(index, 1);
 }
 
 function startPick() {

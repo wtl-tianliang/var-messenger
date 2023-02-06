@@ -2,7 +2,7 @@ import { BrowserWindow } from "electron";
 import nodemailer from "nodemailer";
 import cloneDeep from "lodash/cloneDeep";
 import fs from "fs";
-import { genDocx } from "./word/html2docx/index.js";
+import { genDocx } from "../word/html2docx/index.js";
 
 let transporter = null;
 let loginMail = "";
@@ -33,6 +33,13 @@ export function verifyConnection(option = {}) {
   });
 }
 
+/**
+ * 发送邮件
+ * @param {*} letter 邮件配置
+ * @param {object} options 发送配置
+ * @param {boolean} options.contentToDocx // 正文内容转附件
+ * @returns 邮件服务器响应
+ */
 export async function sendMail(letter, options = {}) {
   const option = {
     from: loginMail,
@@ -92,30 +99,18 @@ export function sendMailForList(mailList, contentToDocx = false) {
       return;
     }
     const option = mailList.shift();
-    let { id, to, cc, subject, html, files = [] } = option;
-    files = files.filter((item) => item && item.length > 0);
-    const attachments = files.map((filepath, index) => {
-      const [filename = `附件${index + 1}`] =
-        filepath.match(/[^\\/]+\.\w+/) || [];
-      return {
-        filename,
-        path: filepath,
-      };
-    });
 
     try {
-      const res = await sendMail(
-        { to, cc, subject, html, attachments },
-        { contentToDocx }
-      );
-      win.webContents.send("sendComplate", { id, ...res });
+      const res = await sendMail(option, { contentToDocx });
+      win.webContents.send("sendComplate", { id: option.id, ...res });
     } catch (err) {
       win.webContents.send("sendComplate", {
-        id,
+        id: option.id,
         status: "fail",
         message: err.message,
       });
     }
+
     sendNext();
   }
   sendNext();

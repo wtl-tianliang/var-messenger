@@ -19,7 +19,7 @@
       ></el-table-column>
       <el-table-column label="附件数量" width="100">
         <template #default="{ row }">
-          {{ row.files.length }}
+          {{ row.attachments.length }}
         </template>
       </el-table-column>
       <el-table-column label="状态">

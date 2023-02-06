@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 import { ipcMain, shell } from "electron";
-import { sendMailForList, verifyConnection } from "./src/mailer";
+import { sendMailForList, verifyConnection } from "./src/mail";
+import { parseAttachments } from "./src/mail/utils";
 import { genDocx } from "./src/word/html2docx";
 import { parseExcel } from "./src/excel";
 import { v4 as uuid } from "uuid";
@@ -21,7 +22,7 @@ let defineVarsMap = {};
 let isHasTitle = false;
 const letters = [];
 let excelPath = "";
-let form = {}
+let form = {};
 
 ipcMain.handle("setHasTitle", (event, data) => {
   isHasTitle = data;
@@ -69,7 +70,7 @@ ipcMain.handle("setForm", (event, data) => {
 });
 
 ipcMain.handle("getForm", (event) => {
-  console.log('getForm', form)
+  console.log("getForm", form);
   return form;
 });
 
@@ -137,10 +138,18 @@ ipcMain.handle("generateMail", (event, data) => {
     if (isHasTitle && rowIndex === 0) {
       return;
     }
-    const to = replaceVar(rowData, form.to)
+    const to = replaceVar(rowData, form.to);
     if (!to) {
       return;
     }
+
+    const varsData = {};
+    Object.keys(defineVarsMap).forEach((key) => {
+      const [pickRow, pickColumn] = defineVarsMap[key].value.split(":");
+      const value = rowData[pickColumn];
+      varsData[key] = value;
+    });
+
     const letter = {
       id: uuid(),
       to,
@@ -148,7 +157,9 @@ ipcMain.handle("generateMail", (event, data) => {
       subject: replaceVar(rowData, form.title),
       html: replaceVar(rowData, form.html),
       status: MAIL_STATUS.MAIL_STATUS_READY,
-      files: [replaceVar(rowData, form.filePath)],
+      attachments: form.filePath.map((file) => {
+        return parseAttachments(file, varsData);
+      }),
     };
     letters.push(letter);
   });
