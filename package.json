@@ -22,11 +22,13 @@
     "canvas-datagrid": "^0.4.5",
     "core-js": "^3.8.3",
     "docx": "^7.8.2",
+    "docxtemplater": "^3.34.0",
     "electron-builder": "^23.3.3",
     "element-plus": "^2.2.25",
     "image-size": "^1.0.2",
     "lodash": "^4.17.21",
     "nodemailer": "^6.8.0",
+    "pizzip": "^3.1.4",
     "posthtml-parser": "^0.11.0",
     "sqlite": "^4.1.2",
     "uuid": "^9.0.0",
@@ -59,6 +61,10 @@
       "plugin:vue/vue3-essential",
       "eslint:recommended"
     ],
+    "globals": {
+      "defineProps": "readonly",
+      "defineEmits": "readonly"
+    },
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },

@@ -6,7 +6,6 @@
 </template>
 
 <script setup>
-/* eslint-disable */
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 import { onMounted, watchEffect, onBeforeUnmount } from "vue";
 import { createEditor, createToolbar } from "@wangeditor/editor";
@@ -14,6 +13,7 @@ import debounce from "lodash/debounce";
 
 const props = defineProps(["modelValue"]);
 const emit = defineEmits(["update:modelValue"]);
+
 let editor = null;
 let stopWatch = null;
 
