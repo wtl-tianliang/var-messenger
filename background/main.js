@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { ipcMain, shell } from "electron";
+import { ipcMain, shell, BrowserWindow } from "electron";
 import { sendMailForList, verifyConnection } from "./src/mail";
 import { parseAttachments } from "./src/mail/utils";
 import { genDocx } from "./src/word/html2docx";
@@ -23,6 +23,20 @@ let isHasTitle = false;
 const letters = [];
 let excelPath = "";
 let form = {};
+
+ipcMain.handle('clearForm', (event, data) => {
+  form = {}
+})
+
+ipcMain.handle('logout', (event, data) => {
+  form = {}
+  defineData = []
+  defineVarsMap = {}
+  defineVars = []
+  isHasTitle = false
+  letters.length = 0
+  excelPath = ""
+})
 
 ipcMain.handle("setHasTitle", (event, data) => {
   isHasTitle = data;
@@ -65,12 +79,10 @@ ipcMain.handle("verifyConnection", (event, option) => {
 });
 
 ipcMain.handle("setForm", (event, data) => {
-  console.log("setform", data);
   form = JSON.parse(data);
 });
 
 ipcMain.handle("getForm", (event) => {
-  console.log("getForm", form);
   return form;
 });
 
@@ -100,7 +112,6 @@ ipcMain.handle("generateDocx", (event, html) => {
     const file = isDevelopment
       ? path.join(__dirname, "doc.docx")
       : path.join(__dirname, "../doc.docx");
-    console.log("Write file:", file);
     shell.openPath(file);
     fs.writeFileSync(file, buffer);
     return ast;

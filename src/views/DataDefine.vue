@@ -13,7 +13,7 @@
       :on-change="handleChange"
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div class="el-upload__text">将文件拖放到这里或 <em>点击选择</em></div>
+      <div ref="uploadTrigger" class="el-upload__text">将文件拖放到这里或 <em>点击选择</em></div>
       <template #tip>
         <p class="description">
           选择 Excel 文件作为数据源，支持 <em>.xls</em> 与 <em>.xlsx</em> 格式
@@ -24,13 +24,16 @@
     <div ref="gridwrap" class="grid-wrap" v-show="isMountGrid">
       <div class="header">
         <div class="front">
-          <el-button round @click="crateNewVar">
-            <el-icon :size="16"><Aim /></el-icon>
-            <span>
-              定义选中列
-              <small>{{ pickTarget || "R:C" }}</small>
-            </span>
-          </el-button>
+          <el-button-group size="small">
+            <el-button round type="info" @click="repick">重选文件</el-button>
+            <el-button round type="primary" @click="crateNewVar">
+              <el-icon :size="14"><Aim /></el-icon>
+              <span>
+                定义选中列
+                <small>{{ pickTarget || "R:C" }}</small>
+              </span>
+            </el-button>
+          </el-button-group>
           <el-checkbox v-model="hasTitle">首行包含标题</el-checkbox>
         </div>
         <el-popover
@@ -72,6 +75,7 @@ const router = useRouter();
 const gridwrap = ref(null);
 const datagridRef = ref();
 const uploadRef = ref();
+const uploadTrigger = ref();
 const pickTarget = ref("");
 const grids = [];
 const hasTitle = ref(false);
@@ -170,7 +174,7 @@ onMounted(() => {
   getVars();
   ipcRenderer.invoke("getExcelPath").then((path) => {
     if (path) {
-      handleChange({ raw: { path } });
+      handleChange({ raw: { path } }, false);
     }
   });
 });
@@ -182,8 +186,15 @@ const handleExceed = (files) => {
   uploadRef.value.handleStart(file);
 };
 
-function handleChange(file) {
+function repick() {
+  uploadTrigger.value.click()
+}
+
+function handleChange(file, clearForm = true) {
   ipcRenderer.invoke("parse-excel", file.raw.path).then((data) => {
+    if (clearForm) {
+      ipcRenderer.invoke('clearForm')
+    }
     const grid = mountGrid(data);
     if (grids.length > 0) {
       const clearLastGrid = grids.pop();
