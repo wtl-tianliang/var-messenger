@@ -2,7 +2,7 @@
   <div class="header">
     <img src="@/assets/icon.png" class="logo" />
     <span class="login">{{ currentLogin }}</span>
-    <span class="logout" v-if="currentLogin">注销</span>
+    <span v-if="currentLogin" class="logout" @click="loginout">注销</span>
   </div>
   <router-view v-slot="{ Component }">
     <component :is="Component"></component>
@@ -20,9 +20,11 @@ ipcRenderer.on('loginSuccess', (event, data) => {
 })
 
 const router = useRouter();
-// eslint-disable-next-line no-unused-vars
-function goBack() {
-  router.back();
+function loginout() {
+  ipcRenderer.invoke('logout').then(() => {
+    currentLogin.value = ''
+    router.push('/')
+  })
 }
 </script>
 

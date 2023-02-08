@@ -96,7 +96,6 @@ function getData() {
     vars.value = data.map((item) => ({ ...item, label: `\`${item.label}\`` }));
   });
   ipcRenderer.invoke("getForm").then((data) => {
-    console.log(data);
     Object.assign(form, data);
   });
 }
