@@ -47,6 +47,14 @@
           >
         </template>
       </el-table-column>
+
+      <!-- 无数据展示 -->
+      <template #empty>
+        <div class="empty">
+          <img src="@/assets/empty.png" />
+          <div class="txt">暂无数据</div>
+        </div>
+      </template>
     </el-table>
 
     <Teleport to="#step-external">
@@ -131,5 +139,18 @@ onMounted(() => {
   align-items: center;
   height: 100%;
   padding: 0 10px;
+}
+.empty {
+  position: relative;
+  img {
+    width: 120px;
+  }
+  .txt {
+    position: absolute;
+    font-size: 12px;
+    left: 50%;
+    top: 60%;
+    transform: translateX(-50%);
+  }
 }
 </style>

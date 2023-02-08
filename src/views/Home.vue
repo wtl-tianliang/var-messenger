@@ -33,6 +33,10 @@
             </div>
           </div>
         </template>
+        <div class="empty" v-if="histories.length < 1">
+          <img src="@/assets/empty.png" />
+          <div class="txt">暂无数据</div>
+        </div>
       </div>
 
       <el-form
@@ -54,14 +58,24 @@
         <el-form-item label="密码">
           <el-input v-model="form.password" :type="passStatus">
             <template #suffix>
-              <i class="view-pass iconfont" :class="passStatus === 'password' ? 'icon-eye1' : 'icon-eye'" @click="handleViewPass"></i>
+              <i
+                class="view-pass iconfont"
+                :class="passStatus === 'password' ? 'icon-eye1' : 'icon-eye'"
+                @click="handleViewPass"
+              ></i>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label-width="0">
           <el-checkbox v-model="form.useSecure">启用安全连接</el-checkbox>
         </el-form-item>
-        <el-button round type="primary" style="width: 100%" @click="toLogin" :loading="isLogin">
+        <el-button
+          round
+          type="primary"
+          style="width: 100%"
+          @click="toLogin"
+          :loading="isLogin"
+        >
           登录
         </el-button>
       </el-form>
@@ -156,11 +170,27 @@ export default {
     width: 300px;
     overflow: auto;
     border-right: 1px solid #dfdfdf;
+    position: relative;
     .header {
       .title {
         font-weight: bold;
         font-size: 14px;
         padding: 8px 0 0 8px;
+      }
+    }
+
+    .empty {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      img {
+        width: 120px;
+      }
+      .txt {
+        color: #ccc;
+        font-size: 12px;
+        text-align: center;
       }
     }
   }
