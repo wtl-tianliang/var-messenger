@@ -13,10 +13,15 @@
 import { ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import { ipcRenderer } from "electron";
+import { ElMessage } from "element-plus";
 
 const currentLogin = ref('')
 ipcRenderer.on('loginSuccess', (event, data) => {
   currentLogin.value = data
+})
+
+ipcRenderer.on('error:VarNotFound', (event, data) => {
+  ElMessage.error({ message: `变量 ${data} 未定义` })
 })
 
 const router = useRouter();

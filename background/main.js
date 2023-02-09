@@ -11,6 +11,7 @@ import path from "path";
 import fs from "fs";
 import MessengerDB from "./src/db";
 import { dbTest } from "./src/db/test";
+import { sendMessageToRender } from './utils'
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -128,6 +129,10 @@ ipcMain.handle("generateMail", (event, data) => {
     if (vars) {
       vars.forEach((varText) => {
         varText = varText.replace(/`/g, "");
+        if (!defineVarsMap[varText]) {
+          sendMessageToRender('error:VarNotFound', varText)
+          throw `error:VarNotFound ${varText}`
+        }
         let [pickRow, pickColumn] = defineVarsMap[varText].value.split(":");
         const isColumn = Number(pickRow) === -1;
         if (isHasTitle) {

@@ -49,8 +49,12 @@
             <file-picker v-model="form.filePath">
               <template #append>
                 <el-checkbox v-model="form.contentAsDocx">
-                  <el-tooltip content="该功能为实验性功能，可能存在问题，请谨慎使用">
-                    <span class="content-to-docx">将邮件正文作为 .docx 附件</span>
+                  <el-tooltip
+                    content="该功能为实验性功能，可能存在问题，请谨慎使用"
+                  >
+                    <span class="content-to-docx"
+                      >将邮件正文作为 .docx 附件</span
+                    >
                   </el-tooltip>
                 </el-checkbox>
               </template>
@@ -75,6 +79,7 @@ import { ref, reactive, onMounted, watch } from "vue";
 import { ipcRenderer } from "electron";
 import { useRouter } from "vue-router";
 import FilePicker from "./components/FilePicker.vue";
+import { ElMessage } from "element-plus";
 
 const router = useRouter();
 
@@ -107,6 +112,10 @@ onMounted(() => {
 });
 
 const toPreview = () => {
+  if (!form.to) {
+    ElMessage.error({ message: "请填写收件人" });
+    return;
+  }
   ipcRenderer.invoke("generateMail", JSON.stringify(form)).then((list) => {
     router.push("/steps/preview");
   });
