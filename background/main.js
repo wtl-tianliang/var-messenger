@@ -180,7 +180,7 @@ ipcMain.handle("generateMail", (event, data) => {
 });
 
 ipcMain.handle("getLetters", () => {
-  return letters;
+  return { letters, contentAsDocx: form.contentAsDocx };
 });
 
 ipcMain.handle("sendByIds", (event, ids) => {

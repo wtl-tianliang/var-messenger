@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21242891",
+      "name": "实验",
+      "font_class": "shiyan",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
       "icon_id": "372275",
       "name": "cc-write",
       "font_class": "cc-write",

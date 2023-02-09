@@ -48,9 +48,11 @@
           <el-form-item label="附件">
             <file-picker v-model="form.filePath">
               <template #append>
-                <el-checkbox v-model="form.contentAsDocx"
-                  >将邮件正文作为 .docx 附件</el-checkbox
-                >
+                <el-checkbox v-model="form.contentAsDocx">
+                  <el-tooltip content="该功能为实验性功能，可能存在问题，请谨慎使用">
+                    <span class="content-to-docx">将邮件正文作为 .docx 附件</span>
+                  </el-tooltip>
+                </el-checkbox>
               </template>
             </file-picker>
           </el-form-item>
@@ -138,5 +140,9 @@ export default {
   align-items: center;
   height: 100%;
   padding: 0 10px;
+}
+
+.content-to-docx {
+  font-size: 12px;
 }
 </style>
