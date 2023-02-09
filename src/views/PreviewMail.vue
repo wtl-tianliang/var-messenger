@@ -19,7 +19,7 @@
       ></el-table-column>
       <el-table-column label="附件数量" width="100">
         <template #default="{ row }">
-          {{ row.attachments.length }}
+          {{ hasContentDocx ? row.attachments.length + 1 : row.attachments.length }}
         </template>
       </el-table-column>
       <el-table-column label="状态">
@@ -74,10 +74,12 @@ import PreviewDialog from "./components/PreviewDialog/index";
 import MAIL_STATUS, { MAIL_STATUS_MAP } from "@/../MAIL_STATUS.js";
 
 const list = ref([]);
+const hasContentDocx = ref(false)
 
 function getlist() {
-  ipcRenderer.invoke("getLetters").then((res) => {
-    list.value = res;
+  ipcRenderer.invoke("getLetters").then(({letters, contentAsDocx}) => {
+    list.value = letters;
+    hasContentDocx.value = contentAsDocx
   });
 }
 
