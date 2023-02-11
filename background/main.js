@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import MAIL_STATUS from "../MAIL_STATUS.js";
 import path from "path";
 import fs from "fs";
-import { getLogin, removeLogin } from "./src/db";
+import { getLogin, removeLogin, insertLogin } from "./src/db";
 import { sendMessageToRender } from "./utils";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -196,5 +196,10 @@ ipcMain.handle("getLogin", async (event) => {
 });
 
 ipcMain.handle("removeLogin", async (event, id) => {
-  await removeLogin(id)
-})
+  await removeLogin(id);
+});
+
+ipcMain.handle("addLogin", async (event, data) => {
+  const { host, port, username, password, useSecure } = data;
+  await insertLogin(host,port, username, password, useSecure);
+});

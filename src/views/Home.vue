@@ -88,6 +88,7 @@ const form = reactive({ host: "", port: "", username: "", password: "" });
 const histories = ref([]);
 const passStatus = ref("password");
 const isLogin = ref(false);
+const isQuickLogin = ref(false)
 
 function handleViewPass() {
   if (passStatus.value === "password") {
@@ -105,13 +106,19 @@ onMounted(async () => {
 async function toLogin() {
   try {
     isLogin.value = true;
-    const login = await ipcRenderer.invoke("verifyConnection", {
+    const loginData = {
       host: form.host,
       port: form.port,
       username: form.username,
       password: form.password,
       useSecure: form.useSecure,
-    });
+    }
+    const login = await ipcRenderer.invoke("verifyConnection", loginData);
+
+    // If not quick login, add login history to database.
+    if(!isQuickLogin.value) {
+      await ipcRenderer.invoke('addLogin', loginData)
+    }
 
     const { type, message } = login;
     if (type === "success") {
@@ -136,6 +143,7 @@ function handleConfig(config) {
 }
 
 function handleLogin(config) {
+  isQuickLogin.value = true
   handleConfig(config);
   toLogin();
 }
