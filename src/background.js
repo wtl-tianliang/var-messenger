@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, screen, Menu } from "electron";
+import { app, protocol, BrowserWindow, screen, Menu, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 
 import "../background/main.js";
@@ -13,6 +13,11 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 Menu.setApplicationMenu(null);
+
+ipcMain.handle('openDevtools', () => {
+  const win = BrowserWindow.getFocusedWindow()
+  win.webContents.openDevTools()
+})
 
 async function createWindow() {
 
