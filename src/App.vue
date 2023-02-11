@@ -1,8 +1,9 @@
 <template>
   <div class="header">
     <img src="@/assets/icon.png" class="logo" alt="logo" />
-    <span class="login">{{ currentLogin }}</span>
-    <span v-if="currentLogin" class="logout" @click="logout">注销</span>
+    <span class="login">{{ currentLogin || 'Var Messenger' }}</span>
+    <span v-if="currentLogin" class="quick-btn" @click="logout">注销</span>
+    <span class="quick-btn" @click="toAbout">关于</span>
   </div>
   <router-view v-slot="{ Component }">
     <component :is="Component"></component>
@@ -25,11 +26,16 @@ ipcRenderer.on('error:VarNotFound', (event, data) => {
 })
 
 const router = useRouter();
+
 function logout() {
   ipcRenderer.invoke('logout').then(() => {
     currentLogin.value = ''
     router.push('/')
   })
+}
+
+function toAbout() {
+  router.push('/about')
 }
 </script>
 
@@ -52,10 +58,11 @@ function logout() {
   .login {
     margin-right: 10px;
   }
-  .logout {
+  .quick-btn {
     color: var(--main-color);
     cursor: pointer;
     -webkit-app-region: none;
+    margin: 0 4px;
   }
 }
 </style>

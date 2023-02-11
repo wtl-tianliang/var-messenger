@@ -24,6 +24,10 @@ const router = createRouter({
           component: () => import('../views/EditorPage/index.vue')
         },
       ]
+    },
+    {
+      path: '/about',
+      component: () => import('../views/AboutPage.vue')
     }
   ]
 })
