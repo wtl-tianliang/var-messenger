@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { ipcMain, shell, BrowserWindow } from "electron";
+import { ipcMain, shell } from "electron";
 import { sendMailForList, verifyConnection } from "./src/mail";
 import { parseAttachments } from "./src/mail/utils";
 import { genDocx } from "./src/word/html2docx";
@@ -9,13 +9,10 @@ import { v4 as uuid } from "uuid";
 import MAIL_STATUS from "../MAIL_STATUS.js";
 import path from "path";
 import fs from "fs";
-import MessengerDB from "./src/db";
-import { dbTest } from "./src/db/test";
-import { sendMessageToRender } from './utils'
+import { getLogin, removeLogin } from "./src/db";
+import { sendMessageToRender } from "./utils";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-
-const db = new MessengerDB();
 
 let defineData = [];
 let defineVars = [];
@@ -25,19 +22,19 @@ const letters = [];
 let excelPath = "";
 let form = {};
 
-ipcMain.handle('clearForm', (event, data) => {
-  form = {}
-})
+ipcMain.handle("clearForm", (event, data) => {
+  form = {};
+});
 
-ipcMain.handle('logout', (event, data) => {
-  form = {}
-  defineData = []
-  defineVarsMap = {}
-  defineVars = []
-  isHasTitle = false
-  letters.length = 0
-  excelPath = ""
-})
+ipcMain.handle("logout", (event, data) => {
+  form = {};
+  defineData = [];
+  defineVarsMap = {};
+  defineVars = [];
+  isHasTitle = false;
+  letters.length = 0;
+  excelPath = "";
+});
 
 ipcMain.handle("setHasTitle", (event, data) => {
   isHasTitle = data;
@@ -130,8 +127,8 @@ ipcMain.handle("generateMail", (event, data) => {
       vars.forEach((varText) => {
         varText = varText.replace(/`/g, "");
         if (!defineVarsMap[varText]) {
-          sendMessageToRender('error:VarNotFound', varText)
-          throw `error:VarNotFound ${varText}`
+          sendMessageToRender("error:VarNotFound", varText);
+          throw new Error(`error:VarNotFound ${varText}`);
         }
         let [pickRow, pickColumn] = defineVarsMap[varText].value.split(":");
         const isColumn = Number(pickRow) === -1;
@@ -161,7 +158,7 @@ ipcMain.handle("generateMail", (event, data) => {
 
     const varsData = {};
     Object.keys(defineVarsMap).forEach((key) => {
-      const [pickRow, pickColumn] = defineVarsMap[key].value.split(":");
+      const [, pickColumn] = defineVarsMap[key].value.split(":");
       const value = rowData[pickColumn];
       varsData[key] = value;
     });
@@ -194,10 +191,10 @@ ipcMain.handle("sendByIds", (event, ids) => {
 });
 
 ipcMain.handle("getLogin", async (event) => {
-  const list = await db.getLogin();
+  const list = await getLogin();
   return list;
 });
 
-ipcMain.handle("dbTest", (event, data) => {
-  dbTest();
-});
+ipcMain.handle("removeLogin", async (event, id) => {
+  await removeLogin(id)
+})

@@ -7,7 +7,7 @@
         </div>
         <template v-for="(item, index) in histories" :key="item.id">
           <div class="login-item">
-            <img class="logo" src="../assets/icon.png" />
+            <img class="logo" src="../assets/icon.png" alt="logo" />
             <div class="info">
               <div class="name" :title="item.username">{{ item.username }}</div>
               <div class="smtp" :title="item.smtp">
@@ -16,14 +16,9 @@
             </div>
             <div class="operate">
               <span
-                title="登录"
+                title="快速登录"
                 class="iconfont icon-login"
                 @click="handleLogin(item)"
-              ></span>
-              <span
-                title="配置"
-                class="iconfont icon-config"
-                @click="handleConfig(item)"
               ></span>
               <span
                 title="删除"
@@ -34,7 +29,7 @@
           </div>
         </template>
         <div class="empty" v-if="histories.length < 1">
-          <img src="@/assets/empty.png" />
+          <img src="@/assets/empty.png" alt="empty placeholder" />
           <div class="txt">暂无数据</div>
         </div>
       </div>
@@ -146,7 +141,9 @@ function handleLogin(config) {
 }
 
 function handleDelete(config, index) {
-  this.histories.splice(index, 1);
+  ipcRenderer.invoke('removeLogin', config.id).then(() => {
+    this.histories.splice(index, 1);
+  })
 }
 </script>
 

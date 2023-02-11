@@ -27,6 +27,7 @@
     "element-plus": "^2.2.25",
     "image-size": "^1.0.2",
     "lodash": "^4.17.21",
+    "node-machine-id": "^1.1.12",
     "nodemailer": "^6.8.0",
     "pizzip": "^3.1.4",
     "posthtml-parser": "^0.11.0",
