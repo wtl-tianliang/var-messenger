@@ -37,9 +37,8 @@
       </el-table-column>
       <el-table-column label="操作" width="300">
         <template #default="{ row, $index }">
-          <el-button @click="handlePreview(row)">查看</el-button>
-          <el-button @click="handleDocx(row)">生成docx</el-button>
-          <el-button @click="handleDelete($index)">删除</el-button>
+          <el-button size="small" @click="handlePreview(row)">查看</el-button>
+          <el-button size="small" type="danger" @click="handleDelete($index)">删除</el-button>
           <el-button
             @click="handleReSend(row)"
             v-if="row.status === 'MAIL_STATUS_SEND_FAIL'"
@@ -51,7 +50,7 @@
       <!-- 无数据展示 -->
       <template #empty>
         <div class="empty">
-          <img src="@/assets/empty.png" />
+          <img src="@/assets/empty.png" alt="empty placeholder" />
           <div class="txt">暂无数据</div>
         </div>
       </template>
@@ -96,12 +95,6 @@ function handleDelete(index) {
 function handleSendAll() {
   const ids = list.value.map((item) => item.id);
   ipcRenderer.invoke("sendByIds", ids);
-}
-
-function handleDocx(row) {
-  ipcRenderer.invoke("generateDocx", row.html).then((res) => {
-    console.log(res);
-  });
 }
 
 function handleReSend(row) {

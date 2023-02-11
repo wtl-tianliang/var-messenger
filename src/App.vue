@@ -1,8 +1,8 @@
 <template>
   <div class="header">
-    <img src="@/assets/icon.png" class="logo" />
+    <img src="@/assets/icon.png" class="logo" alt="logo" />
     <span class="login">{{ currentLogin }}</span>
-    <span v-if="currentLogin" class="logout" @click="loginout">注销</span>
+    <span v-if="currentLogin" class="logout" @click="logout">注销</span>
   </div>
   <router-view v-slot="{ Component }">
     <component :is="Component"></component>
@@ -25,7 +25,7 @@ ipcRenderer.on('error:VarNotFound', (event, data) => {
 })
 
 const router = useRouter();
-function loginout() {
+function logout() {
   ipcRenderer.invoke('logout').then(() => {
     currentLogin.value = ''
     router.push('/')
