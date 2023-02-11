@@ -25,6 +25,30 @@ Boot.registerModule(VariablePlugin({
   }
 }))
 
+const keyStatus = {
+  Control: false,
+  Shift: false,
+  I: false
+}
+
+const KeyList = ['Control', 'Shift', 'I']
+
+document.addEventListener('keydown', (event) => {
+  const { key } = event
+  if (KeyList.includes(key)) {
+    keyStatus[key] = true
+    if (keyStatus.Control && keyStatus.Shift && keyStatus.I) {
+      ipcRenderer.invoke('openDevtools')
+    }
+  }
+})
+
+document.addEventListener('keyup', (event) => {
+  const { key } = event
+  if (KeyList.includes(key)) {
+    keyStatus[key] = false
+  }
+})
 
 const app = createApp(App)
 
