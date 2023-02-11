@@ -25,7 +25,6 @@
       <div class="header">
         <div class="front">
           <el-button-group size="small">
-            <el-button round type="info" @click="repick">重选文件</el-button>
             <el-button round type="primary" @click="crateNewVar">
               <el-icon :size="14"><Aim /></el-icon>
               <span>
@@ -33,6 +32,7 @@
                 <small>{{ pickTarget || "R:C" }}</small>
               </span>
             </el-button>
+            <el-button round type="info" @click="repick">重选文件</el-button>
           </el-button-group>
           <el-checkbox v-model="hasTitle">首行包含标题</el-checkbox>
         </div>
@@ -135,7 +135,6 @@ const mountGrid = (data) => {
     });
     grid.draw();
     pickTarget.value = `-1:${index}`;
-    return;
   };
 
   const handleContextMenu = (e) => {

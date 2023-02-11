@@ -47,7 +47,8 @@
           </el-form-item>
           <el-form-item label="附件">
             <file-picker v-model="form.filePath">
-              <template #append>
+              <!-- Hidden experimental function -->
+              <!-- <template #append>
                 <el-checkbox v-model="form.contentAsDocx">
                   <el-tooltip
                     content="该功能为实验性功能，可能存在问题，请谨慎使用"
@@ -57,7 +58,7 @@
                     >
                   </el-tooltip>
                 </el-checkbox>
-              </template>
+              </template> -->
             </file-picker>
           </el-form-item>
         </el-form>
