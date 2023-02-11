@@ -24,10 +24,6 @@ const router = createRouter({
           component: () => import('../views/EditorPage/index.vue')
         },
       ]
-    },
-    {
-      path: '/test',
-      component: () => import('../views/Test.vue')
     }
   ]
 })
