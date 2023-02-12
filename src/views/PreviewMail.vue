@@ -1,5 +1,6 @@
 <template>
   <div class="preview">
+    <el-alert class="warning" type="warning">请勿在发送完成前离开本页面，发送过程中离开本页面不会停止发送操作。</el-alert>
     <el-table :data="list" height="100%">
       <el-table-column type="index" align="center" label="#"></el-table-column>
       <el-table-column
@@ -120,6 +121,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.warning {
+  margin-bottom: 10px;
+}
+
 .status {
   &.MAIL_STATUS_SEND_SUCCESS {
     color: #67c23a;
