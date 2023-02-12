@@ -10,7 +10,7 @@
             <div class="ext">{{ file.ext }}</div>
             <div class="info">
               <div class="name">{{ file.name }}</div>
-              <div class="size">{{ file.size }}</div>
+              <div class="size">{{ sizeFormat(file.size) }}</div>
               <el-checkbox v-if="file.ext === 'docx'" v-model="file.fillVars"
                 >填充变量</el-checkbox
               >
@@ -70,6 +70,13 @@ function handleRemoveFile(index) {
 
 function startPick() {
   input.value.click();
+}
+
+function sizeFormat (byte) {
+  const units = ["B","KB","MB","GB"]
+  const index = Math.floor(Math.log(byte) / Math.log(1024))
+  const size = byte / Math.pow(1024, index)
+  return `${size.toFixed(2)}${units[index]}`
 }
 </script>
 
