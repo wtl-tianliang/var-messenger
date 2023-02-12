@@ -23,7 +23,9 @@
 import router from "@/router";
 import { shell, clipboard } from "electron";
 import { ElMessage } from "element-plus";
-import { version } from '../../package.json'
+import pkg from '../../package.json'
+
+const version = pkg.version
 
 const links = [
   {
