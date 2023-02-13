@@ -116,6 +116,10 @@ ipcMain.handle("generateDocx", (event, html) => {
   });
 });
 
+ipcMain.handle("clearMails", () => {
+  letters.length = 0
+})
+
 ipcMain.handle("generateMail", (event, data) => {
   const form = JSON.parse(data);
   // 构建收件人列表
