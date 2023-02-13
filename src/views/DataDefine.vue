@@ -193,6 +193,8 @@ function handleChange(file, clearForm = true) {
   ipcRenderer.invoke("parse-excel", file.raw.path).then((data) => {
     if (clearForm) {
       ipcRenderer.invoke('clearForm')
+      vars.value = []
+      setVars()
     }
     const grid = mountGrid(data);
     if (grids.length > 0) {
@@ -203,14 +205,14 @@ function handleChange(file, clearForm = true) {
   });
 }
 
-const setVars = () => {
+function setVars () {
   const varsData = JSON.stringify(vars.value);
   ipcRenderer.invoke("setVars", varsData);
-};
+}
 
-const toNext = () => {
+function toNext () {
   router.push("/steps/editor");
-};
+}
 </script>
 
 <style lang="scss" scoped>
