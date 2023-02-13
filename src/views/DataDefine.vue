@@ -193,6 +193,7 @@ function handleChange(file, clearForm = true) {
   ipcRenderer.invoke("parse-excel", file.raw.path).then((data) => {
     if (clearForm) {
       ipcRenderer.invoke('clearForm')
+      ipcRenderer.invoke('clearMails')
       vars.value = []
       setVars()
     }
