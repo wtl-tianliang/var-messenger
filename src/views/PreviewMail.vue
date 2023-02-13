@@ -121,6 +121,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.preview {
+  display: flex;
+  flex-direction: column;
+}
 .warning {
   margin-bottom: 10px;
 }
