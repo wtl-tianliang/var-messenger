@@ -3,10 +3,9 @@ import path from 'path'
 import sqlite3 from '@journeyapps/sqlcipher'
 import { open } from 'sqlite'
 import { getDeviceId } from '../../utils'
+import { app } from 'electron'
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
-const dbPath = isDevelopment ? path.join(__dirname, 'database.db') : path.join(__dirname, '../database.db')
-
+const dbPath = path.join(app.getPath('userData'), 'database.db')
 
 /**
  * init database
