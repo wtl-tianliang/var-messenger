@@ -1,24 +1,27 @@
-# mailer-x
+# var-messenger
 
-## Project setup
-```
-npm install
-```
+[中文](./docs/Readme-zh.md)
+[English](./README.md)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Features
 
-### Compiles and minifies for production
-```
-npm run build
-```
+- Batch sending
 
-### Lints and fixes files
-```
-npm run lint
-```
+Supports using `.xlsx` files to define variables, set multiple sending addresses, and deliver emails to multiple mailboxes.
+![post](./docs/static/post.png)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Variable text
+
+Supports the use of variables in the email body, which will be automatically replaced with the correct content when sending the email.
+![define-var](./docs/static/define-var.png)
+
+- Template attachment
+
+When using `.docx` files as attachments, autofill replaces variables in attachments.
+![word-template](./docs/static/word.png)
+
+
+## Download link
+
+- Github: https://github.com/wtl-tianliang/var-messenger/releases
+- Official website: under development
