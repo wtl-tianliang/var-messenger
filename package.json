@@ -1,5 +1,5 @@
 {
-  "name": "messenger",
+  "name": "var-messenger",
   "version": "0.2.2",
   "description": "Use variables to send mail in batches",
   "author": "wwwszsxcn@hotmail.com",
@@ -76,5 +76,8 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "engines": {
+    "node": ">=14.0.0 <15"
+  }
 }
