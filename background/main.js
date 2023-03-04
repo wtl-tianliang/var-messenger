@@ -73,7 +73,7 @@ ipcMain.handle("parse-excel", (event, file) => {
 });
 
 ipcMain.handle("verifyConnection", (event, option) => {
-  return verifyConnection(option);
+  return verifyConnection(event.sender, option);
 });
 
 ipcMain.handle("setForm", (event, data) => {
@@ -131,7 +131,7 @@ ipcMain.handle("generateMail", (event, data) => {
       vars.forEach((varText) => {
         varText = varText.replace(/`/g, "");
         if (!defineVarsMap[varText]) {
-          sendMessageToRender("error:VarNotFound", varText);
+          sendMessageToRender(event.sender, "error:VarNotFound", varText);
           throw new Error(`error:VarNotFound ${varText}`);
         }
         let [pickRow, pickColumn] = defineVarsMap[varText].value.split(":");
@@ -191,7 +191,7 @@ ipcMain.handle("getLetters", () => {
 
 ipcMain.handle("sendByIds", (event, ids) => {
   const list = letters.filter((item) => ids.includes(item.id));
-  sendMailForList(list, form.contentAsDocx);
+  sendMailForList(event.sender, list, form.contentAsDocx);
 });
 
 ipcMain.handle("getLogin", async (event) => {

@@ -5,15 +5,18 @@ module.exports = defineConfig({
   css: {
     loaderOptions: {
       sass: {
-        implementation: require("sass")
-      }
-    }
+        implementation: require("sass"),
+      },
+    },
   },
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
       builderOptions: {
-        productName: 'Var Messenger'
+        productName: "Var Messenger",
+        win: {
+          artifactName: "Var-Messenger-Setup-${version}.${ext}"
+        },
       },
       chainWebpackMainProcess: (config) => {
         config.output.filename("background.js");

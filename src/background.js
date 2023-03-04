@@ -2,27 +2,62 @@
 
 import { app, protocol, BrowserWindow, screen, Menu, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater";
+import { version } from "../package.json";
 
 import "../background/main.js";
-import { initDB } from '../background/src/db/index'
+import { initDB } from "../background/src/db/index";
+
+let mainWinId = null // 主窗口ID
+
+function sendUpdateMessage(type, message) {
+  const win = BrowserWindow.fromId(mainWinId);
+  win.webContents.send("UPDATE_MESSAGE", { type, message });
+}
+
+autoUpdater.currentVersion = version;
+autoUpdater.setFeedURL("https://www.oddtools.cn/download/var-messenger/");
+
+autoUpdater.on("update-available", () => {
+  console.log("update-available");
+});
+
+autoUpdater.on("update-not-available", () => {
+  console.log("update-not-available");
+});
+
+autoUpdater.on("download-progress", (info) => {
+  console.log("update-download-progress", info.percent);
+});
+
+autoUpdater.on("update-downloaded", () => {
+  console.log("update-downloaded");
+  sendUpdateMessage("update-downloaded");
+});
+
+autoUpdater.on("error", (err, message) => {
+  console.log("upload-error", message);
+});
+
+ipcMain.handle("update-install", () => {
+  autoUpdater.quitAndInstall();
+});
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure:  true, standard: true } },
+  { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
 Menu.setApplicationMenu(null);
 
-ipcMain.handle('openDevtools', () => {
-  const win = BrowserWindow.getFocusedWindow()
-  win.webContents.openDevTools()
-})
+ipcMain.handle("openDevtools", (event) => {
+  event.sender.openDevTools();
+});
 
 async function createWindow() {
-
   // Init database
-  await initDB()
+  await initDB();
 
   // Create the browser window.
   const display = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
@@ -45,6 +80,8 @@ async function createWindow() {
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
   });
+
+  mainWinId = win.id
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -76,7 +113,8 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  createWindow();
+  await createWindow();
+  await autoUpdater.checkForUpdates();
 });
 
 // Exit cleanly on request from parent process in development mode.

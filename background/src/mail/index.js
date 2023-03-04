@@ -1,4 +1,3 @@
-import { BrowserWindow } from "electron";
 import nodemailer from "nodemailer";
 import cloneDeep from "lodash/cloneDeep";
 import fs from "fs";
@@ -7,7 +6,7 @@ import { genDocx } from "../word/html2docx/index.js";
 let transporter = null;
 let loginMail = "";
 
-export function verifyConnection(option = {}) {
+export function verifyConnection(webContents, option = {}) {
   const { host, port, password, username, useSecure = false } = option;
   loginMail = username;
   transporter = nodemailer.createTransport({
@@ -25,8 +24,7 @@ export function verifyConnection(option = {}) {
       if (error) {
         resolve({ type: "error", message: error.message });
       } else {
-        const win = BrowserWindow.getFocusedWindow();
-        win.webContents.send("loginSuccess", loginMail);
+        webContents.send("loginSuccess", loginMail);
         resolve({ type: "success", message: "login success" });
       }
     });
@@ -91,8 +89,7 @@ export async function sendMail(letter, options = {}) {
   }
 }
 
-export function sendMailForList(mailList, contentToDocx = false) {
-  const win = BrowserWindow.getFocusedWindow();
+export function sendMailForList(webContents, mailList, contentToDocx = false) {
   mailList = cloneDeep(mailList);
   async function sendNext() {
     if (mailList.length < 1) {
@@ -102,9 +99,9 @@ export function sendMailForList(mailList, contentToDocx = false) {
 
     try {
       const res = await sendMail(option, { contentToDocx });
-      win.webContents.send("sendComplate", { id: option.id, ...res });
+      webContents.send("sendComplate", { id: option.id, ...res });
     } catch (err) {
-      win.webContents.send("sendComplate", {
+      webContents.send("sendComplate", {
         id: option.id,
         status: "fail",
         message: err.message,
