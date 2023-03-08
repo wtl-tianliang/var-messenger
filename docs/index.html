@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Var Messenger 批量高效 • 变量邮件</title>
+  <link rel="shortcut icon" href="./static/icon.ico">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./scripts/scrollreveal.js"></script>
+</head>
+
+<body>
+
+  <!-- header -->
+  <div class="top-level">
+    <canvas id="canvas"></canvas>
+    <div class="front-end">
+      <header>
+        <div class="title">Var Messenger</div>
+        <ul>
+          <li>
+            <a href="https://github.com/wtl-tianliang/var-messenger/releases" target="_blank">更新历史</a>
+            <a href="https://github.com/wtl-tianliang/var-messenger" target="_blank">代码开源</a>
+          </li>
+        </ul>
+      </header>
+      <div class="content">
+        <img src="./static/icon.ico" alt="" class="logo">
+        <p>批量高效 • 变量邮件</p>
+        <a class="download" href="https://www.oddtools.cn/download/var-messenger/Var-Messenger-Setup.exe"
+          target="_blank">
+          <img src="./static/windows-fill.png" alt="windows icon">
+          <span>Windows 下载</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- login -->
+  <div class="desc-block">
+    <div class="h-center container">
+      <div class="desc">
+        <h3>多账号支持</h3>
+        <p>记住历史账号，无需重复登录</p>
+        <p class="notice">* 本软件不提供邮件发送服务，仅提供邮件构造能力，请自行申请第三方邮件服务。</p>
+      </div>
+      <div class="img-box">
+        <img src="./static/login.png" alt="login">
+      </div>
+    </div>
+  </div>
+
+  <!-- vars -->
+  <div class="desc-block">
+    <div class="h-center container">
+      <div class="desc">
+        <h3>邮件变量 自动替换</h3>
+        <p>读取 .xlsx 文件，可将表格列定义为变量并插入邮件正文</p>
+        <p>配合批量发送，一行数据就是一封邮件</p>
+      </div>
+      <div class="img-box">
+        <img src="./static/define-var.png" alt="var">
+      </div>
+    </div>
+  </div>
+
+  <!-- post -->
+  <div class="desc-block">
+    <div class="h-center container">
+      <div class="desc">
+        <h3>批量生成 批量发送</h3>
+        <p>使用变量批量定义收件邮箱，高效发送邮件</p>
+      </div>
+      <div class="img-box">
+        <img src="./static/post.png" alt="post">
+      </div>
+    </div>
+  </div>
+
+  <!-- docx -->
+  <div class="desc-block">
+    <div class="h-center container">
+      <div class="desc">
+        <h3>文档变量 自动填充</h3>
+        <p>将 .docx 文件作为附件发送时，可以在文件中插入变量，发送时自动填充正确的内容</p>
+      </div>
+      <div class="img-box">
+        <img src="./static/word.png" alt="docx">
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://beian.miit.gov.cn" target="_blank">京ICP备2023003614号</a>
+  </div>
+
+  <script>
+    ScrollReveal().reveal('.container', {
+      delay: 400,
+      duration: 500,
+      scale: 0.5
+    })
+  </script>
+
+  <script src="./scripts/particle.js"></script>
+</body>
+
+</html>
