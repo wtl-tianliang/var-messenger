@@ -52,8 +52,14 @@ a {
 }
 
 .top-level .title {
-  font-size: 20px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
   font-weight: bold;
+}
+.top-level .title img {
+  width: 30px;
+  margin-right: 10px;
 }
 
 .top-level .logo {
