@@ -18,6 +18,10 @@ export function verifyConnection(webContents, option = {}) {
       user: username,
       pass: password,
     },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
+    },
   });
   return new Promise((resolve) => {
     transporter.verify((error) => {
