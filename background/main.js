@@ -189,9 +189,9 @@ ipcMain.handle("getLetters", () => {
   return { letters, contentAsDocx: form.contentAsDocx };
 });
 
-ipcMain.handle("sendByIds", (event, ids) => {
+ipcMain.handle("sendByIds", async (event, ids) => {
   const list = letters.filter((item) => ids.includes(item.id));
-  sendMailForList(event.sender, list, form.contentAsDocx);
+  await sendMailForList(event.sender, list, form.contentAsDocx);
 });
 
 ipcMain.handle("getLogin", async (event) => {

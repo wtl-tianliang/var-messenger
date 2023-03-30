@@ -213,7 +213,6 @@
 		if (this.constructor.debug && console) {
 			var report = "%cScrollReveal: " + message;
 			details.forEach(function (detail) { return (report += "\n — " + detail); });
-			console.log(report, 'color: #ea654b;'); // eslint-disable-line no-console
 		}
 	}
 

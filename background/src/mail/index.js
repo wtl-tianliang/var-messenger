@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import cloneDeep from "lodash/cloneDeep";
 import fs from "fs";
 import { genDocx } from "../word/html2docx/index.js";
+import { logger } from "../log";
 
 let transporter = null;
 let loginMail = "";
@@ -9,7 +10,8 @@ let loginMail = "";
 export function verifyConnection(webContents, option = {}) {
   const { host, port, password, username, useSecure = false } = option;
   loginMail = username;
-  transporter = nodemailer.createTransport({
+
+  const options = {
     host: host,
     port: port,
     secure: useSecure,
@@ -22,12 +24,16 @@ export function verifyConnection(webContents, option = {}) {
       // do not fail on invalid certs
       rejectUnauthorized: false,
     },
-  });
+  };
+
+  transporter = nodemailer.createTransport(options);
   return new Promise((resolve) => {
     transporter.verify((error) => {
       if (error) {
+        logger("login", { options, error });
         resolve({ type: "error", message: error.message });
       } else {
+        logger("login", { options, message: "success" });
         webContents.send("loginSuccess", loginMail);
         resolve({ type: "success", message: "login success" });
       }
@@ -61,7 +67,6 @@ export async function sendMail(letter, options = {}) {
       content: buffer,
     });
   }
-  console.log("sendMessage", option);
 
   const tolist = option.to.split(";").filter((item) => !regEmail.test(item));
   if (tolist.length > 0) {
@@ -87,32 +92,37 @@ export async function sendMail(letter, options = {}) {
 
   try {
     const res = await transporter.sendMail(option);
-    return { status: "success", message: res.response };
-  } catch (err) {
-    throw { status: "fail", messge: err.message };
+    logger("send", { option, res });
+    return { status: "success", message: res.response || "发送成功" };
+  } catch (error) {
+    logger("send", { option, error });
+    throw { status: "fail", messge: error.message || "未知异常" };
   }
 }
 
 export function sendMailForList(webContents, mailList, contentToDocx = false) {
   mailList = cloneDeep(mailList);
-  async function sendNext() {
-    if (mailList.length < 1) {
-      return;
-    }
-    const option = mailList.shift();
+  return new Promise((resolve) => {
+    async function sendNext() {
+      if (mailList.length < 1) {
+        resolve();
+        return;
+      }
+      const option = mailList.shift();
 
-    try {
-      const res = await sendMail(option, { contentToDocx });
-      webContents.send("sendComplate", { id: option.id, ...res });
-    } catch (err) {
-      webContents.send("sendComplate", {
-        id: option.id,
-        status: "fail",
-        message: err.message,
-      });
-    }
+      try {
+        const res = await sendMail(option, { contentToDocx });
+        webContents.send("sendComplate", { id: option.id, ...res });
+      } catch (err) {
+        webContents.send("sendComplate", {
+          id: option.id,
+          status: "fail",
+          message: err.message,
+        });
+      }
 
+      sendNext();
+    }
     sendNext();
-  }
-  sendNext();
+  });
 }
