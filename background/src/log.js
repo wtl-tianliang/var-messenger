@@ -10,10 +10,12 @@ function getDate() {
   return `${year}-${month}-${date}`;
 }
 
-const logPath = path.join(app.getPath("userData"), "logs");
+export const logPath = path.join(app.getPath("userData"), "logs");
+
 if (!fs.existsSync(logPath)) {
   fs.mkdirSync(logPath);
 }
+
 const stream = fs.createWriteStream(path.join(logPath, `${getDate()}.log`), {
   encoding: "utf-8",
   flags: "a", // 追加日志

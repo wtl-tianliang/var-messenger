@@ -11,6 +11,7 @@ import path from "path";
 import fs from "fs";
 import { getLogin, removeLogin, insertLogin } from "./src/db";
 import { sendMessageToRender } from "./utils";
+import { logPath } from "./src/log"
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -117,8 +118,8 @@ ipcMain.handle("generateDocx", (event, html) => {
 });
 
 ipcMain.handle("clearMails", () => {
-  letters.length = 0
-})
+  letters.length = 0;
+});
 
 ipcMain.handle("generateMail", (event, data) => {
   const form = JSON.parse(data);
@@ -205,5 +206,9 @@ ipcMain.handle("removeLogin", async (event, id) => {
 
 ipcMain.handle("addLogin", async (event, data) => {
   const { host, port, username, password, useSecure } = data;
-  await insertLogin(host,port, username, password, useSecure);
+  await insertLogin(host, port, username, password, useSecure);
+});
+
+ipcMain.handle("openLogdir", () => {
+  shell.openPath(logPath)
 });

@@ -4,6 +4,7 @@
     <span class="login">{{ currentLogin || "Var Messenger" }}</span>
     <span v-if="currentLogin" class="quick-btn" @click="logout">注销</span>
     <span class="quick-btn" @click="toAbout">关于</span>
+    <span class="quick-btn" @click="openLog">日志</span>
   </div>
   <router-view v-slot="{ Component }">
     <component :is="Component"></component>
@@ -60,6 +61,9 @@ function logout() {
 
 function toAbout() {
   router.push("/about");
+}
+function openLog() {
+  ipcRenderer.invoke("openLogdir")
 }
 </script>
 
