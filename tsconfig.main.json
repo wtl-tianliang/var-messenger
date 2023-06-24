@@ -1,0 +1,9 @@
+{
+  "include": ["main/**/*", "background/env.d.ts", "scripts"],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "module": "CommonJS",
+    "moduleResolution": "node"
+  }
+}

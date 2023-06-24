@@ -28,15 +28,23 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, watchEffect, onBeforeUnmount } from "vue";
-import { v4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
 const emit = defineEmits(["update:modelValue"]);
 const props = defineProps(["modelValue"]);
 
-const input = ref(null);
-const fileList = ref([]);
+type FileInfo = {
+  id: string;
+  name: string;
+  path: string;
+  size: number;
+  fillVars: boolean;
+  ext: string;
+};
+const input = ref();
+const fileList = ref<FileInfo[]>([]);
 
 const stop = watchEffect(() => {
   fileList.value = props.modelValue;
@@ -46,12 +54,15 @@ onBeforeUnmount(() => {
   stop && stop();
 });
 
-function handlePickFile({ target: { files } }) {
+function handlePickFile(e: Event) {
+  const target = e.target as HTMLInputElement;
+  const files = target.files || [];
   const list = Array.from(files);
-  list.forEach((file) => {
+  list.forEach((_file) => {
+    const file = _file as File & { path: string }
     const ext = file.name.split(".").pop();
-    const pickItem = {
-      id: v4(),
+    const pickItem: FileInfo = {
+      id: uuid(),
       name: file.name,
       path: file.path,
       size: file.size,
@@ -64,19 +75,19 @@ function handlePickFile({ target: { files } }) {
   emit("update:modelValue", fileList.value);
 }
 
-function handleRemoveFile(index) {
+function handleRemoveFile(index: number) {
   fileList.value.splice(index, 1);
 }
 
 function startPick() {
-  input.value.click();
+  input.value?.click();
 }
 
-function sizeFormat (byte) {
-  const units = ["B","KB","MB","GB"]
-  const index = Math.floor(Math.log(byte) / Math.log(1024))
-  const size = byte / Math.pow(1024, index)
-  return `${size.toFixed(2)}${units[index]}`
+function sizeFormat(byte: number) {
+  const units = ["B", "KB", "MB", "GB"];
+  const index = Math.floor(Math.log(byte) / Math.log(1024));
+  const size = byte / Math.pow(1024, index);
+  return `${size.toFixed(2)}${units[index]}`;
 }
 </script>
 

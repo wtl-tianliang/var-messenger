@@ -16,19 +16,25 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-const steps = ref([
+type Step = {
+  icon: string;
+  path: string;
+  name: string;
+  description: string;
+}
+const steps = ref<Step[]>([
   { icon: "iconfont icon-var", path: "/steps/definedata", name: "定义变量", description: "" },
   { icon: "iconfont icon-mail", path: "/steps/editor", name: "编写邮件", description: "" },
   { icon: "iconfont icon-send1", path: "/steps/preview", name: "预览发送", description: "" },
 ]);
 
-function handleJump(step) {
+function handleJump(step: Step) {
   router.replace(step.path);
 }
 </script>

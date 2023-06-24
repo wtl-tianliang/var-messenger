@@ -19,11 +19,13 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import router from "@/router";
-import { shell, clipboard } from "electron";
 import { ElMessage } from "element-plus";
+// @ts-ignore
 import pkg from '../../package.json'
+
+const funs = window.funs;
 
 const version = pkg.version
 
@@ -40,9 +42,9 @@ const links = [
   },
 ];
 
-function open(href) {
-  shell.openExternal(href);
-  clipboard.writeText(href)
+function open(href: string) {
+  funs.copy(href)
+  funs.openURL(href)
   ElMessage.success({ message: "链接已复制" });
 }
 

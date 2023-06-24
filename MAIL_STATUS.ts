@@ -4,7 +4,7 @@ export default {
   MAIL_STATUS_SEND_FAIL: "MAIL_STATUS_SEND_FAIL",
 };
 
-export const MAIL_STATUS_MAP = {
+export const MAIL_STATUS_MAP: {[key: string]: string} = {
   MAIL_STATUS_READY: "待发送",
   MAIL_STATUS_SEND_SUCCESS: "发送成功",
   MAIL_STATUS_SEND_FAIL: "发送失败"

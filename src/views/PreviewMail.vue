@@ -82,41 +82,41 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { ipcRenderer } from "electron";
 import PreviewDialog from "./components/PreviewDialog/index";
-import MAIL_STATUS, { MAIL_STATUS_MAP } from "@/../MAIL_STATUS.js";
+import MAIL_STATUS, { MAIL_STATUS_MAP } from "@/../MAIL_STATUS";
 
-const list = ref([]);
+const ipcRenderer = window.ipcRenderer
+const list = ref<any[]>([]);
 const hasContentDocx = ref(false);
 const blockOperate = ref(false);
 
 function getlist() {
   ipcRenderer.invoke("getLetters").then(({ letters, contentAsDocx }) => {
-    list.value = letters.map((item) => ({ ...item, disabled: false }));
+    list.value = letters.map((item: any) => ({ ...item, disabled: false }));
     hasContentDocx.value = contentAsDocx;
   });
 }
 
-function handlePreview(row) {
+function handlePreview(row: any) {
   PreviewDialog.open({
     html: row.html,
   });
 }
 
-function handleDelete(index) {
+function handleDelete(index: number) {
   list.value.splice(index, 1);
 }
 
 async function handleSendAll() {
   blockOperate.value = true;
-  const ids = list.value.map((item) => item.id);
+  const ids = list.value.map((item: any) => item.id);
   await ipcRenderer.invoke("sendByIds", ids);
   blockOperate.value = false;
 }
 
-async function handleReSend(row) {
+async function handleReSend(row: any) {
   const ids = [row.id];
   row.disabled = true;
   await ipcRenderer.invoke("sendByIds", ids);
@@ -124,7 +124,7 @@ async function handleReSend(row) {
 }
 
 ipcRenderer.on("sendComplate", (event, { id, status, message }) => {
-  const letter = list.value.find((item) => item.id === id);
+  const letter = list.value.find((item:any) => item.id === id);
   if (!letter) {
     return;
   }

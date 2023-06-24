@@ -72,7 +72,7 @@ export function parseStyle(styleStr) {
     let [key, value] = decl.split(/\s*?:\s*?/);
     key = key.trim();
     value = value.trim();
-    let convert = styleConvert[key];
+    const convert = styleConvert[key];
     if (convert) {
       Object.assign(result, convert(value));
     } else {

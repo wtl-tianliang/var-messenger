@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 import { onMounted, watchEffect, onBeforeUnmount } from "vue";
 import { createEditor, createToolbar } from "@wangeditor/editor";
@@ -14,13 +14,13 @@ import debounce from "lodash/debounce";
 const props = defineProps(["modelValue"]);
 const emit = defineEmits(["update:modelValue"]);
 
-let editor = null;
-let stopWatch = null;
+let editor: any = null;
+let stopWatch: any = null;
 
 const editorConfig = {
   placeholder: "在此输入内容",
 
-  onCreated(iEditor) {
+  onCreated(iEditor: any) {
     stopWatch = watchEffect(() => {
       if (props.modelValue === iEditor.getHtml()) {
         return;

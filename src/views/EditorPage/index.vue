@@ -74,14 +74,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import Editor from "@/components/MailEditor.vue";
 import { ref, reactive, onMounted, watch } from "vue";
-import { ipcRenderer } from "electron";
 import { useRouter } from "vue-router";
 import FilePicker from "./components/FilePicker.vue";
 import { ElMessage } from "element-plus";
 
+const ipcRenderer = window.ipcRenderer
 const router = useRouter();
 
 const form = reactive({
@@ -97,11 +97,14 @@ watch(form, (data) => {
   ipcRenderer.invoke("setForm", JSON.stringify(data));
 });
 
-const vars = ref([]);
+const vars = ref<{ label: string; value: string }[]>([]);
 
 function getData() {
   ipcRenderer.invoke("getVars").then((data) => {
-    vars.value = data.map((item) => ({ ...item, label: `\`${item.label}\`` }));
+    vars.value = data.map((item: any) => ({
+      ...item,
+      label: `\`${item.label}\``,
+    }));
   });
   ipcRenderer.invoke("getForm").then((data) => {
     Object.assign(form, data);
@@ -123,7 +126,7 @@ const toPreview = () => {
 };
 </script>
 
-<script>
+<script lang="ts">
 export default {
   name: "MailEditorPage",
 };

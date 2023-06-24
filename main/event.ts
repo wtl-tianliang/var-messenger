@@ -7,7 +7,7 @@ import { genDocx } from "./src/word/html2docx";
 import { parseExcel } from "./src/excel";
 import { v4 as uuid } from "uuid";
 import MAIL_STATUS from "../MAIL_STATUS.js";
-import path from "path";
+import * as path from "path";
 import fs from "fs";
 import { getLogin, removeLogin, insertLogin } from "./src/db";
 import { sendMessageToRender } from "./utils";
@@ -21,7 +21,7 @@ let defineVarsMap = {};
 let isHasTitle = false;
 const letters = [];
 let excelPath = "";
-let form = {};
+let form: any = {};
 
 ipcMain.handle("clearForm", (event, data) => {
   form = {};
@@ -60,7 +60,7 @@ ipcMain.handle("parse-excel", (event, file) => {
     }
   }
 
-  data.forEach((col) => {
+  data.forEach((col: Array<any>) => {
     if (col.length < MIN_COLS) {
       let colIndex = MIN_COLS - col.length;
       while (colIndex > 0) {

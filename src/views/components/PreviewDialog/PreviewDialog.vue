@@ -4,7 +4,7 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted, toRefs } from "vue";
 import { ElDialog } from 'element-plus'
 

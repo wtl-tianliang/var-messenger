@@ -78,14 +78,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { reactive, ref, onMounted } from "vue";
-import { ipcRenderer } from "electron";
 import { ElMessage } from "element-plus";
 import router from "@/router/index";
 
-const form = reactive({ host: "", port: "", username: "", password: "" });
-const histories = ref([]);
+const ipcRenderer = window.ipcRenderer
+const form = reactive({ host: "", port: "", username: "", password: "", useSecure: false });
+const histories = ref<any[]>([]);
 const passStatus = ref("password");
 const isLogin = ref(false);
 const isQuickLogin = ref(false)
@@ -134,7 +134,7 @@ async function toLogin() {
   }
 }
 
-function handleConfig(config) {
+function handleConfig(config: any) {
   form.host = config.smtp;
   form.port = config.smtp_port;
   form.username = config.username;
@@ -142,20 +142,20 @@ function handleConfig(config) {
   form.useSecure = config.use_secure === 1;
 }
 
-function handleLogin(config) {
+function handleLogin(config: any) {
   isQuickLogin.value = true
   handleConfig(config);
   toLogin();
 }
 
-function handleDelete(config, index) {
+function handleDelete(config: any, index: number) {
   ipcRenderer.invoke('removeLogin', config.id).then(() => {
-    this.histories.splice(index, 1);
+    histories.value.splice(index, 1);
   })
 }
 </script>
 
-<script>
+<script lang="ts">
 export default {
   name: "ViewHome",
 };

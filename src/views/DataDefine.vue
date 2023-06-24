@@ -13,7 +13,9 @@
       :on-change="handleChange"
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div ref="uploadTrigger" class="el-upload__text">将文件拖放到这里或 <em>点击选择</em></div>
+      <div ref="uploadTrigger" class="el-upload__text">
+        将文件拖放到这里或 <em>点击选择</em>
+      </div>
       <template #tip>
         <p class="description">
           选择 Excel 文件作为数据源，支持 <em>.xls</em> 与 <em>.xlsx</em> 格式
@@ -64,12 +66,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, onBeforeUnmount, onMounted, watch } from "vue";
-import { ipcRenderer } from "electron";
 import { useRouter } from "vue-router";
+// @ts-ignore
 import canvasDatagrid from "canvas-datagrid";
 import { ElMessageBox, genFileId } from "element-plus";
+
+const ipcRenderer = window.ipcRenderer
 
 const router = useRouter();
 const gridwrap = ref(null);
@@ -77,7 +81,7 @@ const datagridRef = ref();
 const uploadRef = ref();
 const uploadTrigger = ref();
 const pickTarget = ref("");
-const grids = [];
+const grids: any[] = [];
 const hasTitle = ref(false);
 const isMountGrid = ref(false);
 
@@ -85,7 +89,7 @@ watch(hasTitle, (value) => {
   ipcRenderer.invoke("setHasTitle", value);
 });
 
-const vars = ref([]);
+const vars = ref<{ label: string; value: string }[]>([]);
 
 const crateNewVar = () => {
   if (!pickTarget.value) {
@@ -104,12 +108,12 @@ const crateNewVar = () => {
     .catch(() => {});
 };
 
-const handleRemoveVar = (index) => {
+const handleRemoveVar = (index: number) => {
   vars.value.splice(index, 1);
   setVars();
 };
 
-const mountGrid = (data) => {
+const mountGrid = (data: any) => {
   isMountGrid.value = true;
   const grid = canvasDatagrid({
     parentNode: datagridRef.value,
@@ -123,7 +127,7 @@ const mountGrid = (data) => {
   grid.style.height = "100%";
   grid.style.gridBackgroundColor = "#fff";
   grid.style.cellHeight = 30;
-  const handleClick = (e) => {
+  const handleClick = (e: Event & { cell: any }) => {
     e.preventDefault();
     const { cell } = e;
     const { index } = cell.header;
@@ -137,7 +141,7 @@ const mountGrid = (data) => {
     pickTarget.value = `-1:${index}`;
   };
 
-  const handleContextMenu = (e) => {
+  const handleContextMenu = (e: Event) => {
     e.preventDefault();
   };
 
@@ -178,7 +182,7 @@ onMounted(() => {
   });
 });
 
-const handleExceed = (files) => {
+const handleExceed = (files: any[]) => {
   uploadRef.value.clearFiles();
   const file = files[0];
   file.uid = genFileId();
@@ -186,16 +190,16 @@ const handleExceed = (files) => {
 };
 
 function repick() {
-  uploadTrigger.value.click()
+  uploadTrigger.value.click();
 }
 
-function handleChange(file, clearForm = true) {
+function handleChange(file: { raw: any }, clearForm = true) {
   ipcRenderer.invoke("parse-excel", file.raw.path).then((data) => {
     if (clearForm) {
-      ipcRenderer.invoke('clearForm')
-      ipcRenderer.invoke('clearMails')
-      vars.value = []
-      setVars()
+      ipcRenderer.invoke("clearForm");
+      ipcRenderer.invoke("clearMails");
+      vars.value = [];
+      setVars();
     }
     const grid = mountGrid(data);
     if (grids.length > 0) {
@@ -206,12 +210,12 @@ function handleChange(file, clearForm = true) {
   });
 }
 
-function setVars () {
+function setVars() {
   const varsData = JSON.stringify(vars.value);
   ipcRenderer.invoke("setVars", varsData);
 }
 
-function toNext () {
+function toNext() {
   router.push("/steps/editor");
 }
 </script>

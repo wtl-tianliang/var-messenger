@@ -5,18 +5,12 @@
   </router-view>
 </template>
 
-<script setup>
-import { RouterView, useRouter } from "vue-router";
+<script lang="ts" setup>
+import { RouterView } from "vue-router";
 import StepsBar from "./StepsBar.vue";
-
-const router = useRouter();
-// eslint-disable-next-line no-unused-vars
-function handleBack() {
-  router.back();
-}
 </script>
 
-<script>
+<script lang="ts">
 export default {
   name: "StepsLayout",
 };

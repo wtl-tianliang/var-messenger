@@ -1,21 +1,20 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, screen, Menu, ipcMain } from "electron";
-import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import { app, BrowserWindow, screen, Menu, ipcMain } from "electron";
+import * as path from "path";
 import { autoUpdater } from "electron-updater";
 import { version } from "../package.json";
 
-import "../background/main.js";
-import { initDB } from "../background/src/db/index";
+import "./event";
+import { initDB } from "./src/db/index";
 
-let mainWinId = null // 主窗口ID
+let mainWinId = null; // 主窗口ID
 
-function sendUpdateMessage(type, message) {
+function sendUpdateMessage(type, message = "") {
   const win = BrowserWindow.fromId(mainWinId);
   win.webContents.send("UPDATE_MESSAGE", { type, message });
 }
 
-autoUpdater.currentVersion = version;
 autoUpdater.setFeedURL("https://www.oddtools.cn/download/var-messenger/");
 
 autoUpdater.on("update-available", () => {
@@ -44,10 +43,6 @@ ipcMain.handle("update-install", () => {
 });
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-// Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  { scheme: "app", privileges: { secure: true, standard: true } },
-]);
 
 Menu.setApplicationMenu(null);
 
@@ -74,25 +69,20 @@ async function createWindow() {
     },
     titleBarStyle: "hidden",
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-    },
+      preload: path.join(__dirname, "./preload.js")
+    }
   });
 
-  mainWinId = win.id
+  mainWinId = win.id;
 
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+  if (process.env.VITE_DEV_SERVER_URL) {
+    win.loadURL(process.env.VITE_DEV_SERVER_URL);
+    win.webContents.openDevTools()
   } else {
-    createProtocol("app");
-    // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    win.loadFile(path.join(__dirname, "./index.html"));
   }
 }
+
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
