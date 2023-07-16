@@ -1,13 +1,14 @@
 import nodemailer from "nodemailer";
 import cloneDeep from "lodash/cloneDeep";
 import fs from "fs";
-import { genDocx } from "../word/html2docx/index.js";
 import { logger } from "../log";
+import type { WebContents } from "electron";
+import type { LoginOption } from "@typings/index.d";
 
 let transporter = null;
 let loginMail = "";
 
-export function verifyConnection(webContents, option = {}) {
+export function verifyConnection(webContents, option: LoginOption) {
   const { host, port, password, username, useSecure = false } = option;
   loginMail = username;
 
@@ -60,14 +61,6 @@ export async function sendMail(letter, options = {}) {
 
   const regEmail = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
 
-  if (options.contentToDocx) {
-    const { buffer } = await genDocx(letter.html);
-    option.attachments.push({
-      filename: "正文附件.docx",
-      content: buffer,
-    });
-  }
-
   const tolist = option.to.split(";").filter((item) => !regEmail.test(item));
   if (tolist.length > 0) {
     throw { status: "fail", message: "收件人邮箱格式不正确" };
@@ -100,7 +93,11 @@ export async function sendMail(letter, options = {}) {
   }
 }
 
-export function sendMailForList(webContents, mailList, contentToDocx = false) {
+export function sendMailForList(
+  webContents: WebContents,
+  mailList,
+  contentToDocx: boolean = false
+): Promise<void> {
   mailList = cloneDeep(mailList);
   return new Promise((resolve) => {
     async function sendNext() {
