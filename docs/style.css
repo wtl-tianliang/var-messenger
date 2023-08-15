@@ -75,7 +75,9 @@ a {
 }
 
 .top-level .download {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 200px;
   border: 1px solid #d33332;
   margin: 30px auto 0 auto;
@@ -91,7 +93,6 @@ a {
 .top-level .download img {
   width: 24px;
   position: relative;
-  top: 2px;
   left: -10px;
 }
 
