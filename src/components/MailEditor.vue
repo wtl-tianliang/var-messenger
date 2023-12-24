@@ -1,96 +1,90 @@
 <template>
-  <div id="editor—wrapper">
-    <div id="toolbar-container"><!-- 工具栏 --></div>
-    <div id="editor-container"><!-- 编辑器 --></div>
+  <div class="editor">
+    <textarea ref="dom"></textarea>
   </div>
 </template>
 
+
 <script lang="ts" setup>
-import "@wangeditor/editor/dist/css/style.css"; // 引入 css
-import { onMounted, watchEffect, onBeforeUnmount } from "vue";
-import { createEditor, createToolbar } from "@wangeditor/editor";
-import debounce from "lodash/debounce";
+import type { TinyMCE, Editor } from "typings/tinymce";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import InsertVariablePlugin from "./InsertVariable";
 
-const props = defineProps(["modelValue"]);
-const emit = defineEmits(["update:modelValue"]);
+const dom = ref()
+const Tinymce = window.tinymce as TinyMCE
+let instance: Editor | null = null
 
-let editor: any = null;
-let stopWatch: any = null;
+Tinymce.PluginManager.add('variable', InsertVariablePlugin);
 
-const editorConfig = {
-  placeholder: "在此输入内容",
 
-  onCreated(iEditor: any) {
-    stopWatch = watchEffect(() => {
-      if (props.modelValue === iEditor.getHtml()) {
-        return;
-      }
-      iEditor && iEditor.setHtml(props.modelValue);
-    });
+const plugins = ["variable", "lists", "advlist", "link", "autolink", "autosave", "emoticons", "image", "preview", "anchor", "searchreplace", "visualblocks", "table", "wordcount"]
+
+
+const toolbar = [
+  ["undo", "redo", "variable", "fontfamily", "fontsizeinput", "lineheight", "underline", "blockquote", "forecolor", "backcolor", "strikethrough", "subscript", "superscript", "outdent", "indent", "paste", "pastetext", "remove", "removeformat", "wordcount"],
+  ["bullist", "numlist", "hr", "link", "table", "tablerowprops", "tablecellprops", "tablemergecells", "image", "emoticons", "anchor"],
+].map(arr => arr.join(" "))
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
   },
+})
 
-  onChange: debounce(function debounceChange(iEditor) {
-    const html = iEditor.getHtml();
-    emit("update:modelValue", html);
-  }, 200),
-
-  MENU_CONF: {
-    uploadImage: {
-      base64LimitSize: Infinity,
-    },
-  },
-};
+const emit = defineEmits(['update:modelValue'])
 
 onMounted(() => {
-  const value = props.modelValue;
-
-  const toolbarConfig = {
-    excludeKeys: [
-      "group-video",
-      "lineHeight",
-      "todo",
-      "code",
-      "codeBlock",
-      "divider",
-    ],
-    insertKeys: {
-      index: 0,
-      keys: ["variable"],
+  Tinymce.init({
+    target: dom.value,
+    language: "zh-Hans",
+    height: "100%",
+    menubar: false,
+    font_family_formats: "微软雅黑='微软雅黑';宋体='宋体';黑体='黑体';仿宋='仿宋';楷体='楷体';隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
+    font_size_input_default_unit: "px",
+    plugins,
+    toolbar,
+    statusbar: false,
+    link_default_target: '_blank',
+    images_upload_handler(blobInfo, progress) {
+      const blob = blobInfo.blob()
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          const base64 = e.target?.result
+          if (base64) {
+            resolve(base64.toString())
+          } else {
+            reject({ message: "图片处理失败", remove: true })
+          }
+          progress(100)
+        }
+        reader.readAsDataURL(blob)
+      })
     },
-  };
-
-  createToolbar({
-    editor: createEditor({
-      selector: "#editor-container",
-      html: value,
-      config: editorConfig,
-      mode: "default", // or 'simple'
-    }),
-    selector: "#toolbar-container",
-    config: toolbarConfig,
-    mode: "default", // or 'simple'
-  });
-});
-
+    setup: function (editor) {
+      instance = editor
+      editor.on('init', function (ed) {
+        const body = editor.getBody()
+        body.style.fontFamily = "宋体,Time New Roman,serif"
+        body.style.fontSize = "16px"
+        editor.setContent(props.modelValue, { format: "html" })
+      });
+      editor.on("change keyup undo redo", (e) => {
+        const html = editor.getContent({ format: "html" })
+        emit("update:modelValue", html)
+      })
+    },
+  })
+})
 onBeforeUnmount(() => {
-  stopWatch();
-  editor && editor.destroy();
-});
+  instance && instance.destroy()
+})
 </script>
 
+
 <style lang="scss" scoped>
-#editor—wrapper {
-  border: 1px solid #ccc;
-  z-index: 100; /* 按需定义 */
-  font-size: 16px;
-  display: flex;
-  flex-direction: column;
-}
-#toolbar-container {
-  border-bottom: 1px solid #ccc;
-}
-#editor-container {
+.editor {
   height: 100%;
-  overflow: auto;
 }
 </style>

@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "MAIL_STATUS.ts", "package.json"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "MAIL_STATUS.ts", "package.json", "typings/tinymce.d.ts"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "moduleResolution": "Node",

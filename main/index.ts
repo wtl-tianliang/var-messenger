@@ -1,12 +1,39 @@
 "use strict";
 
-import { app, BrowserWindow, screen, Menu, ipcMain } from "electron";
+import { app, BrowserWindow, screen, Menu, ipcMain, protocol, ipcRenderer } from "electron";
 import * as path from "path";
 import { autoUpdater } from "electron-updater";
-import { version } from "../package.json";
 
-import "./event";
+import * as events from "./event";
 import { initDB } from "./src/db/index";
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: "varm",
+    privileges: {
+      bypassCSP: true,
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+    },
+  },
+]);
+
+function registerProtocol() {
+  protocol.handle("varm", (request) => {
+    const { pathname } = new URL(request.url);
+    if (pathname === "/") {
+      const data = events.getVars()
+      return new Response(JSON.stringify(data));
+    }
+    return new Response(
+      JSON.stringify({
+        url: request.url,
+        headers: request.headers,
+      })
+    );
+  });
+}
 
 let mainWinId = null; // 主窗口ID
 
@@ -69,20 +96,19 @@ async function createWindow() {
     },
     titleBarStyle: "hidden",
     webPreferences: {
-      preload: path.join(__dirname, "./preload.js")
-    }
+      preload: path.join(__dirname, "./preload.js"),
+    },
   });
 
   mainWinId = win.id;
 
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
-    win.webContents.openDevTools()
+    win.webContents.openDevTools();
   } else {
     win.loadFile(path.join(__dirname, "./index.html"));
   }
 }
-
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -103,6 +129,7 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
+  registerProtocol();
   await createWindow();
   await autoUpdater.checkForUpdates();
 });

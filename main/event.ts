@@ -23,6 +23,10 @@ const letters = [];
 let excelPath = "";
 let form: any = {};
 
+export function getVars() {
+  return defineVars;
+}
+
 ipcMain.handle("clearForm", (event, data) => {
   form = {};
 });
