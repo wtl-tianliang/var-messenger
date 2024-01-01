@@ -63,7 +63,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <editor class="content" v-model="form.html"></editor>
+      <editor class="content" v-model="form.html" :default-style="injectStyle"></editor>
     </div>
 
     <Teleport to="#step-external">
@@ -75,14 +75,21 @@
 </template>
 
 <script lang="ts" setup>
-import Editor from "@/components/MailEditor.vue";
+import { type Config } from "@typings/index";
+import Editor from "@/components/MailEditor/index.vue";
 import { ref, reactive, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import FilePicker from "./components/FilePicker.vue";
 import { ElMessage } from "element-plus";
 
+
 const ipcRenderer = window.ipcRenderer
 const router = useRouter();
+const injectStyle = ref<Config>({});
+
+ipcRenderer.invoke("loadConfig").then((config) => {
+  injectStyle.value = config;
+})
 
 const form = reactive({
   title: "",

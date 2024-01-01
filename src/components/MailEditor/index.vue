@@ -21,7 +21,7 @@ const plugins = ["variable", "lists", "advlist", "link", "autolink", "autosave",
 
 
 const toolbar = [
-  ["undo", "redo", "variable", "fontfamily", "fontsizeinput", "lineheight", "underline", "blockquote", "forecolor", "backcolor", "strikethrough", "subscript", "superscript", "outdent", "indent", "paste", "pastetext", "remove", "removeformat", "wordcount"],
+  ["undo", "redo", "variable", "fontfamily", "fontsizeinput", "lineheight", "bold", "underline", "blockquote", "forecolor", "backcolor", "strikethrough", "subscript", "superscript", "outdent", "indent", "paste", "pastetext", "remove", "removeformat", "wordcount"],
   ["bullist", "numlist", "hr", "link", "table", "tablerowprops", "tablecellprops", "tablemergecells", "image", "emoticons", "anchor"],
 ].map(arr => arr.join(" "))
 
@@ -30,6 +30,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  defaultStyle: {
+    type: Object,
+    default: () => ({})
+  }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -64,10 +68,13 @@ onMounted(() => {
     },
     setup: function (editor) {
       instance = editor
-      editor.on('init', function (ed) {
+      editor.on('init',  (ed) => {
         const body = editor.getBody()
-        body.style.fontFamily = "宋体,Time New Roman,serif"
-        body.style.fontSize = "16px"
+        if (props.defaultStyle){
+          body.style.fontSize = props.defaultStyle.fontSize + "px"
+          body.style.fontFamily = props.defaultStyle.fontFamily
+          body.style.lineHeight = props.defaultStyle.lineHeight
+        }
         editor.setContent(props.modelValue, { format: "html" })
       });
       editor.on("change keyup undo redo", (e) => {

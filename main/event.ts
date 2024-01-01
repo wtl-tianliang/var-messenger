@@ -11,7 +11,8 @@ import * as path from "path";
 import fs from "fs";
 import { getLogin, removeLogin, insertLogin } from "./src/db";
 import { sendMessageToRender } from "./utils";
-import { logPath } from "./src/log"
+import { logPath } from "./src/log";
+import { loadConfig, saveConfig } from "./src/configuration";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -26,6 +27,12 @@ let form: any = {};
 export function getVars() {
   return defineVars;
 }
+
+ipcMain.handle("loadConfig", (event, data) => {
+  return loadConfig();
+});
+
+ipcMain.handle("saveConfig", (event, data) => saveConfig(data));
 
 ipcMain.handle("clearForm", (event, data) => {
   form = {};
@@ -156,6 +163,13 @@ ipcMain.handle("generateMail", (event, data) => {
     return template;
   };
 
+  const wrapStyle = (html) => {
+    const config = loadConfig()
+    const style = `.letter-content{font-family:${config.fontFamily};font-size:${config.fontSize}px;line-height:${config.lineHeight}}`;
+    const result = `<div class="letter-content"><style>${style}</style>${html}</div>`;
+    return result
+  }
+
   defineData.forEach((rowData, rowIndex) => {
     if (isHasTitle && rowIndex === 0) {
       return;
@@ -177,7 +191,7 @@ ipcMain.handle("generateMail", (event, data) => {
       to,
       cc: replaceVar(rowData, form.cc),
       subject: replaceVar(rowData, form.title),
-      html: replaceVar(rowData, form.html),
+      html: wrapStyle(replaceVar(rowData, form.html)),
       status: MAIL_STATUS.MAIL_STATUS_READY,
       attachments: form.filePath.map((file) => {
         return parseAttachments(file, varsData);
@@ -214,5 +228,5 @@ ipcMain.handle("addLogin", async (event, data) => {
 });
 
 ipcMain.handle("openLogdir", () => {
-  shell.openPath(logPath)
+  shell.openPath(logPath);
 });
