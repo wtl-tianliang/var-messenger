@@ -150,7 +150,6 @@ export default {
     .content {
       flex: 1;
       height: 0;
-      margin-bottom: 4px;
     }
   }
 }

@@ -93,5 +93,20 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .editor {
   height: 100%;
+  :deep(.tox-tinymce) {
+    border-width: 1px;
+    border-radius: 6px;
+    .tox-editor-header {
+      box-shadow: none;
+    }
+    .tox-toolbar-overlord {
+      .tox-toolbar {
+        background-size: 100%;
+        .tox-toolbar__group {
+          padding: 0;
+        }
+      }
+    }
+  }
 }
 </style>
