@@ -27,21 +27,21 @@ ipcRenderer.on("error:VarNotFound", (event, data) => {
   ElMessage.error({ message: `变量 ${data} 未定义` });
 });
 
-const handles: { "update-downloaded": () => void; [key: string]: () => void } =
-  {
-    "update-downloaded": () => {
-      ElMessageBox.confirm("新版本下载完成，是否立即安装？", "版本更新", {
-        confirmButtonText: "立即安装",
-        cancelButtonText: "稍后再说",
+const handles: { "update-downloaded": () => void;[key: string]: () => void } =
+{
+  "update-downloaded": () => {
+    ElMessageBox.confirm("新版本下载完成，是否立即安装？", "版本更新", {
+      confirmButtonText: "立即安装",
+      cancelButtonText: "稍后再说",
+    })
+      .then(() => {
+        ipcRenderer.invoke("update-install");
       })
-        .then(() => {
-          ipcRenderer.invoke("update-install");
-        })
-        .catch(() => {
-          console.log("取消更新");
-        });
-    },
-  };
+      .catch(() => {
+        console.log("取消更新");
+      });
+  },
+};
 
 ipcRenderer.on("UPDATE_MESSAGE", (event, data) => {
   const { type } = data;
@@ -108,7 +108,14 @@ ul {
   padding-inline-start: 20px;
 }
 :root {
-  --main-color: var(--el-color-primary);
+  --main-color: #d33332;
+  --el-color-primary: var(--main-color);
   --global-margin: 15px;
+}
+.el-button--primary {
+  --el-button-hover-bg-color: #e94444;
+  --el-button-active-bg-color: #e94444;
+  --el-button-hover-border-color: #e94444;
+  --el-button-active-border-color: #e94444;
 }
 </style>

@@ -1,108 +1,70 @@
 <template>
-  <div class="preview">
-    <el-alert class="warning" type="warning"
-      >请勿在发送完成前离开本页面，发送过程中离开本页面不会停止发送操作。</el-alert
-    >
-    <el-table :data="list" height="100%">
-      <el-table-column type="index" align="center" label="#"></el-table-column>
-      <el-table-column
-        label="标题"
-        prop="subject"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        label="收件人"
-        prop="to"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        label="抄送人"
-        prop="cc"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column label="附件数量" width="100">
-        <template #default="{ row }">{{
-          hasContentDocx ? row.attachments.length + 1 : row.attachments.length
-        }}</template>
-      </el-table-column>
-      <el-table-column label="状态">
-        <template #default="{ row }">
-          <el-tooltip
-            effect="dark"
-            :content="row.message"
-            placement="top-start"
-            :disabled="!row.message"
-          >
-            <span class="status" :class="row.status">{{
-              MAIL_STATUS_MAP[row.status]
-            }}</span>
+  <div class="preview-wrapper">
+    <div class="list-box">
+      <div class="header">邮件列表</div>
+      <template v-for="mail in list" :key="mail.id">
+        <div class="mail-item" :class="[mail.status.toLowerCase(), { actived: previewHtml.key === mail.id }]"
+          @click="viewContent(mail)">
+          <div class="subject" :title="mail.subject">{{ mail.subject }}</div>
+          <div class="to">{{ mail.to }}</div>
+          <div class="cc" v-if="mail.cc">{{ mail.cc }}</div>
+          <el-tooltip :disabled="!mail.message" effect="dark" :content="mail.message" placement="right-start">
+            <span class="status">{{ MAIL_STATUS_MAP[mail.status] }}</span>
           </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="300">
-        <template #default="{ row, $index }">
-          <el-button size="small" @click="handlePreview(row)">查看</el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete($index)"
-            :disabled="blockOperate"
-            >删除</el-button
-          >
-          <el-button
-            size="small"
-            @click="handleReSend(row)"
-            :disabled="blockOperate || row.disabled"
-            v-if="row.status === 'MAIL_STATUS_SEND_FAIL'"
-            >重试</el-button
-          >
-        </template>
-      </el-table-column>
-
-      <!-- 无数据展示 -->
-      <template #empty>
-        <div class="empty">
-          <img src="@/assets/empty.png" alt="empty placeholder" />
-          <div class="txt">暂无数据</div>
         </div>
       </template>
-    </el-table>
-
-    <Teleport to="#step-external">
-      <div class="operate-bar">
-        <el-button
-          :disabled="blockOperate"
-          round
-          type="primary"
-          @click="handleSendAll"
-          >全部发送</el-button
-        >
+    </div>
+    <div class="preview-box" :key="previewHtml.key">
+      <div class="header">
+        <div class="subject">{{ previewHtml.data.subject }}</div>
+        <div class="field-item">
+          <div class="label">收件人</div>
+          <div class="value">{{ previewHtml.data.to }}</div>
+        </div>
+        <div class="field-item">
+          <div class="label">抄送人</div>
+          <div class="value">{{ previewHtml.data.cc || "无" }}</div>
+        </div>
+        <div class="field-item" v-if="previewHtml.data.attachments">
+          <div class="label">附件</div>
+          <div class="value">{{ previewHtml.data.attachments.length }}</div>
+        </div>
       </div>
-    </Teleport>
+      <div class="html" v-html="previewHtml.data.html"></div>
+    </div>
   </div>
+  <Teleport to="#step-external">
+    <div class="operate-bar">
+      <el-button :disabled="blockOperate" round type="primary" @click="handleSendAll">全部发送</el-button>
+    </div>
+  </Teleport>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import PreviewDialog from "./components/PreviewDialog/index";
 import MAIL_STATUS, { MAIL_STATUS_MAP } from "@/../MAIL_STATUS";
 
-const ipcRenderer = window.ipcRenderer
+const ipcRenderer = window.ipcRenderer;
 const list = ref<any[]>([]);
 const hasContentDocx = ref(false);
 const blockOperate = ref(false);
+const previewHtml = reactive<{ key: number; data: any }>({
+  key: Date.now(),
+  data: {},
+});
 
 function getlist() {
   ipcRenderer.invoke("getLetters").then(({ letters, contentAsDocx }) => {
     list.value = letters.map((item: any) => ({ ...item, disabled: false }));
     hasContentDocx.value = contentAsDocx;
+    viewContent(list.value[0]);
   });
 }
 
-function handlePreview(row: any) {
-  PreviewDialog.open({
-    html: row.html,
-  });
+function viewContent(row: any) {
+  previewHtml.key = row.id;
+  previewHtml.data = row;
 }
 
 function handleDelete(index: number) {
@@ -124,7 +86,7 @@ async function handleReSend(row: any) {
 }
 
 ipcRenderer.on("sendComplate", (event, { id, status, message }) => {
-  const letter = list.value.find((item:any) => item.id === id);
+  const letter = list.value.find((item: any) => item.id === id);
   if (!letter) {
     return;
   }
@@ -141,20 +103,94 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.preview {
+.preview-wrapper {
   display: flex;
-  flex-direction: column;
-}
-.warning {
-  margin-bottom: 10px;
+  height: calc(100% - 86px);
+  .list-box {
+    border-right: 1px solid #eee;
+    width: 227px;
+  }
 }
 
-.status {
-  &.MAIL_STATUS_SEND_SUCCESS {
-    color: #67c23a;
+.preview-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 0;
+  .header {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    background-color: #f5f5f5;
   }
-  &.MAIL_STATUS_SEND_FAIL {
-    color: #f56c6c;
+  .subject {
+    font-size: 16px;
+    margin-bottom: 0.5em;
+  }
+  .field-item {
+    margin-top: 6px;
+    display: flex;
+    font-size: 12px;
+    .label {
+      width: 80px;
+      color: #727d95;
+    }
+  }
+  .html {
+    flex: 1;
+    margin: 10px;
+    overflow: auto;
+  }
+}
+
+.list-box {
+  height: 100%;
+  overflow: auto;
+  .header {
+    position: sticky;
+    top: 0;
+    background-color: #FFF;
+    border-bottom: 1px dotted #ccc;
+    padding: 4px 6px;
+    font-weight: bold;
+  }
+  .mail-item {
+    font-size: 12px;
+    padding: 4px;
+    margin: 6px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    &.actived {
+      border: 1px solid var(--main-color);
+      border-radius: 4px;
+      .subject {
+        color: var(--main-color)
+      }
+    }
+    & + .mail-item {
+      margin-top: 8px;
+    }
+    .subject {
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .to,
+    .cc {
+      color: #727d95;
+      padding: 4px 0;
+    }
+
+    &.mail_status_send_success {
+      .status {
+        color: #67c23a;
+      }
+    }
+    &.mail_status_send_fail {
+      .status {
+        color: #f56c6c;
+      }
+    }
   }
 }
 
@@ -163,18 +199,5 @@ onMounted(() => {
   align-items: center;
   height: 100%;
   padding: 0 10px;
-}
-.empty {
-  position: relative;
-  img {
-    width: 120px;
-  }
-  .txt {
-    position: absolute;
-    font-size: 12px;
-    left: 50%;
-    top: 60%;
-    transform: translateX(-50%);
-  }
 }
 </style>

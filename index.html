@@ -16,9 +16,30 @@
       font-size: 14px;
     }
 
+    /* 整体滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      /* 设置滚动条宽度 */
+    }
+
+    /* 滑块样式 */
+    ::-webkit-scrollbar-thumb {
+      background-color: #c0c0c0;
+      /* 设置滑块颜色 */
+      border-radius: 5px;
+      /* 设置滑块圆角 */
+    }
+
+    /* 轨道样式 */
+    ::-webkit-scrollbar-track {
+      background-color: #f0f0f0;
+      /* 设置轨道颜色 */
+    }
+
     * {
       padding: 0;
       margin: 0;
+      box-sizing: border-box;
     }
   </style>
 </head>
