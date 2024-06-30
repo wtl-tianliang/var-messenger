@@ -74,7 +74,7 @@ function back() {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
   margin: 0 auto;
   width: 60%;
