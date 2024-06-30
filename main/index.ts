@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, BrowserWindow, screen, Menu, ipcMain, protocol, ipcRenderer } from "electron";
+import { app, BrowserWindow, screen, Menu, ipcMain, protocol, shell } from "electron";
 import * as path from "path";
 import { autoUpdater } from "electron-updater";
 
@@ -99,6 +99,11 @@ async function createWindow() {
       preload: path.join(__dirname, "./preload.js"),
     },
   });
+
+  win.webContents.on("will-navigate", (event) => {
+    event.preventDefault();
+    shell.openExternal(event.url);
+  })
 
   mainWinId = win.id;
 
