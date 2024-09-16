@@ -7,6 +7,14 @@ import electron from "vite-plugin-electron";
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "./",
+  server: {
+    open: false,
+  },
+  build: {
+    rollupOptions: {
+      external: ["pg-hstore"],
+    }
+  },
   plugins: [
     vue(),
     vueJsx(),

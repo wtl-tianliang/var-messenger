@@ -1,8 +1,8 @@
 {
   "name": "var-messenger",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Use variables to send mail in batches",
-  "author": "wwwszsxcn@hotmail.com",
+  "author": "oddtools.cn",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -29,8 +29,10 @@
     "lodash": "^4.17.21",
     "node-machine-id": "^1.1.12",
     "nodemailer": "^6.8.0",
+    "pg-hstore": "^2.3.4",
     "pizzip": "^3.1.4",
     "posthtml-parser": "^0.11.0",
+    "sequelize": "^6.37.3",
     "sqlite": "^4.1.2",
     "tinymce": "^6.8.2",
     "uuid": "^9.0.0",
