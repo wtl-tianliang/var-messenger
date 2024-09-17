@@ -1,9 +1,9 @@
 import { Model, INTEGER, STRING } from "sequelize";
-import type { Sequelize as SequelizeType } from "sequelize/types";
+import type { Sequelize } from "sequelize/types";
 
-class Login extends Model {}
+export class Login extends Model {}
 
-export default async function initTable(sequelize: SequelizeType) {
+export default async function initTable(sequelize: Sequelize, force = false) {
   Login.init(
     {
       id: {
@@ -44,7 +44,8 @@ export default async function initTable(sequelize: SequelizeType) {
       tableName: "Login",
     }
   );
-  await sequelize.sync();
+  await sequelize.sync({ force });
+  return Login;
 }
 
 /**
@@ -82,6 +83,12 @@ export async function insertLogin(
  */
 export async function getLogin(offset = 0, limit = 10) {
   const res = await Login.findAll({ offset, limit, where: { is_drop: 0 } });
+  const list = res.map((item) => item.toJSON());
+  return list;
+}
+
+export async function getAllLogin(){
+  const res = await Login.findAll();
   const list = res.map((item) => item.toJSON());
   return list;
 }

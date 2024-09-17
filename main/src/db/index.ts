@@ -3,8 +3,10 @@ import sqlite3 from "@journeyapps/sqlcipher";
 import { getDeviceId } from "../../utils";
 import { app } from "electron";
 import { Sequelize } from "sequelize";
-import initLoginTable from "./tables/LoginTable";
-export * from "./tables/LoginTable"
+import initHistoryTable from "./tables/LoginHistory";
+import loginMigrate from "./migrate/loginMigrate";
+export * from "./tables/LoginHistory";
+export * from "./tables/LoginTable";
 
 const dbPath = path.join(app.getPath("userData"), "database.db");
 
@@ -20,5 +22,10 @@ const sequelize = new Sequelize({
  * init database
  */
 export async function initDB() {
-  await initLoginTable(sequelize);
+  const query = sequelize.getQueryInterface();
+  const loginTableExits = await query.tableExists("login");
+  if (loginTableExits) {
+    await loginMigrate(sequelize);
+  }
+  await initHistoryTable(sequelize);
 }

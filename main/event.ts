@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import MAIL_STATUS from "../MAIL_STATUS.js";
 import * as path from "path";
 import fs from "fs";
-import { getLogin, removeLogin, insertLogin } from "./src/db";
+import { removeLogin, insertLogin, getLoginHistoies } from "./src/db";
 import { sendMessageToRender } from "./utils";
 import { logPath } from "./src/log";
 import { loadConfig, saveConfig } from "./src/configuration";
@@ -214,7 +214,7 @@ ipcMain.handle("sendByIds", async (event, ids) => {
 });
 
 ipcMain.handle("getLogin", async (event) => {
-  const list = await getLogin();
+  const list = await getLoginHistoies();
   return list;
 });
 

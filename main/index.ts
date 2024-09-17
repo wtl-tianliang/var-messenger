@@ -1,6 +1,7 @@
 "use strict";
 
-import { app, BrowserWindow, screen, Menu, ipcMain, protocol, shell } from "electron";
+import { app, BrowserWindow, screen, Menu } from "electron";
+import { ipcMain, protocol, shell } from "electron";
 import * as path from "path";
 import { autoUpdater } from "electron-updater";
 
@@ -23,7 +24,7 @@ function registerProtocol() {
   protocol.handle("varm", (request) => {
     const { pathname } = new URL(request.url);
     if (pathname === "/") {
-      const data = events.getVars()
+      const data = events.getVars();
       return new Response(JSON.stringify(data));
     }
     return new Response(
@@ -103,7 +104,7 @@ async function createWindow() {
   win.webContents.on("will-navigate", (event) => {
     event.preventDefault();
     shell.openExternal(event.url);
-  })
+  });
 
   mainWinId = win.id;
 

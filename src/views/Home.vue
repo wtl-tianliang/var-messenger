@@ -9,9 +9,9 @@
           <div class="login-item">
             <img class="logo" src="../assets/icon.png" alt="logo" />
             <div class="info">
-              <div class="name" :title="item.username">{{ item.username }}</div>
-              <div class="smtp" :title="item.smtp">
-                {{ item.smtp }}:{{ item.smtp_port }}
+              <div class="name" :title="item.smtp_user">{{ item.smtp_user }}</div>
+              <div class="smtp" :title="item.smtp_url">
+                {{ item.smtp_url }}:{{ item.smtp_port }}
               </div>
             </div>
             <div class="operate">
@@ -135,11 +135,11 @@ async function toLogin() {
 }
 
 function handleConfig(config: any) {
-  form.host = config.smtp;
+  form.host = config.smtp_url;
   form.port = config.smtp_port;
-  form.username = config.username;
-  form.password = config.password;
-  form.useSecure = config.use_secure === 1;
+  form.username = config.smtp_user;
+  form.password = config.smtp_password;
+  form.useSecure = config.smtp_secure === 1;
 }
 
 function handleLogin(config: any) {
