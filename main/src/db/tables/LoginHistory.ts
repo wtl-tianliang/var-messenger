@@ -95,7 +95,35 @@ export async function insertLoginHistory(
   return res.toJSON();
 }
 
-export async function getLoginHistoies(offset = 0, limit = 10) {
+export async function insertLogin(
+  smtp_url: string,
+  smtp_port: number,
+  smtp_user: string,
+  smtp_password: string,
+  smtp_secure: number,
+  iamp_url: string = "",
+  iamp_port: number = 0,
+  iamp_user: string = "",
+  iamp_password: string = "",
+  iamp_secure: number = 0
+) {
+  const res = await LoginHistory.create({
+    smtp_url,
+    smtp_port,
+    smtp_user,
+    smtp_password,
+    smtp_secure,
+    iamp_url,
+    iamp_port,
+    iamp_user,
+    iamp_password,
+    iamp_secure,
+    is_drop: 0,
+  });
+  return res.toJSON();
+}
+
+export async function getLoginHistories(offset = 0, limit = 10) {
   const res = await LoginHistory.findAll({
     offset,
     limit,

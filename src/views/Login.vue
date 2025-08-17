@@ -41,10 +41,10 @@
         label-position="left"
       >
         <h2>登录邮箱</h2>
-        <el-form-item label="服务器地址">
+        <el-form-item label="SMTP服务器地址">
           <el-input v-model="form.host"></el-input>
         </el-form-item>
-        <el-form-item label="服务器端口">
+        <el-form-item label="SMTP服务器端口">
           <el-input v-model="form.port"></el-input>
         </el-form-item>
         <el-form-item label="用户名">
@@ -63,6 +63,30 @@
         </el-form-item>
         <el-form-item label-width="0">
           <el-checkbox v-model="form.useSecure">启用安全连接</el-checkbox>
+        </el-form-item>
+        <el-divider content-position="left">IMAP配置</el-divider>
+        <el-form-item label="IMAP服务器地址">
+          <el-input v-model="form.imapHost"></el-input>
+        </el-form-item>
+        <el-form-item label="IMAP服务器端口">
+          <el-input v-model="form.imapPort"></el-input>
+        </el-form-item>
+        <el-form-item label="IMAP用户名">
+          <el-input v-model="form.imapUser"></el-input>
+        </el-form-item>
+        <el-form-item label="IMAP密码">
+          <el-input v-model="form.imapPassword" :type="imapPassStatus">
+            <template #suffix>
+              <i
+                class="view-pass iconfont"
+                :class="imapPassStatus === 'password' ? 'icon-eye1' : 'icon-eye'"
+                @click="handleViewImapPass"
+              ></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label-width="0">
+          <el-checkbox v-model="form.imapSecure">启用IMAP安全连接</el-checkbox>
         </el-form-item>
         <el-button
           round
@@ -84,9 +108,21 @@ import { ElMessage } from "element-plus";
 import router from "@/router/index";
 
 const ipcRenderer = window.ipcRenderer
-const form = reactive({ host: "", port: "", username: "", password: "", useSecure: false });
+const form = reactive({ 
+  host: "", 
+  port: "", 
+  username: "", 
+  password: "", 
+  useSecure: false,
+  imapHost: "",
+  imapPort: "",
+  imapUser: "",
+  imapPassword: "",
+  imapSecure: false
+});
 const histories = ref<any[]>([]);
 const passStatus = ref("password");
+const imapPassStatus = ref("password");
 const isLogin = ref(false);
 const isQuickLogin = ref(false)
 
@@ -95,6 +131,14 @@ function handleViewPass() {
     passStatus.value = "text";
   } else {
     passStatus.value = "password";
+  }
+}
+
+function handleViewImapPass() {
+  if (imapPassStatus.value === "password") {
+    imapPassStatus.value = "text";
+  } else {
+    imapPassStatus.value = "password";
   }
 }
 
@@ -112,6 +156,11 @@ async function toLogin() {
       username: form.username,
       password: form.password,
       useSecure: form.useSecure,
+      imapHost: form.imapHost,
+      imapPort: form.imapPort,
+      imapUser: form.imapUser,
+      imapPassword: form.imapPassword,
+      imapSecure: form.imapSecure
     }
     const login = await ipcRenderer.invoke("verifyConnection", loginData);
 
@@ -140,6 +189,11 @@ function handleConfig(config: any) {
   form.username = config.smtp_user;
   form.password = config.smtp_password;
   form.useSecure = config.smtp_secure === 1;
+  form.imapHost = config.iamp_url;
+  form.imapPort = config.iamp_port;
+  form.imapUser = config.iamp_user;
+  form.imapPassword = config.iamp_password;
+  form.imapSecure = config.iamp_secure === 1;
 }
 
 function handleLogin(config: any) {

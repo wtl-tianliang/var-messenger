@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { ipcMain, shell } from "electron";
-import { sendMailForList, loginSmtp } from "./src/mail/smtp";
+import { sendMailForList, loginSmtp, loginImap } from "./src/mail/smtp";
 import { test } from "./src/mail/imap";
 import { parseAttachments } from "./src/mail/utils";
 import { genDocx } from "./src/word/html2docx";
@@ -10,7 +10,7 @@ import { v4 as uuid } from "uuid";
 import MAIL_STATUS from "../MAIL_STATUS.js";
 import * as path from "path";
 import fs from "fs";
-import { removeLogin, insertLogin, getLoginHistoies } from "./src/db";
+import { removeLogin, insertLogin, getLoginHistories } from "./src/db";
 import { sendMessageToRender } from "./utils";
 import { logPath } from "./src/log";
 import { loadConfig, saveConfig } from "./src/configuration";
@@ -217,7 +217,7 @@ ipcMain.handle("sendByIds", async (event, ids) => {
 });
 
 ipcMain.handle("getLogin", async (event) => {
-  const list = await getLoginHistoies();
+  const list = await getLoginHistories();
   return list;
 });
 
@@ -228,6 +228,25 @@ ipcMain.handle("removeLogin", async (event, id) => {
 ipcMain.handle("addLogin", async (event, data) => {
   const { host, port, username, password, useSecure } = data;
   await insertLogin(host, port, username, password, useSecure);
+});
+
+ipcMain.handle("verifyConnection", async (event, option) => {
+  // 先验证SMTP连接
+  const smtpResult: any = await loginSmtp(event.sender, option);
+  
+  if (smtpResult && smtpResult.type === "error") {
+    return smtpResult;
+  }
+  
+  // 如果SMTP成功，再验证IMAP连接
+  const imapResult: any = await loginImap(event.sender, option);
+  
+  if (imapResult && imapResult.type === "error") {
+    return imapResult;
+  }
+  
+  // 如果都成功，返回成功结果
+  return { type: "success", message: "SMTP和IMAP连接都已验证成功" };
 });
 
 ipcMain.handle("openLogdir", () => {

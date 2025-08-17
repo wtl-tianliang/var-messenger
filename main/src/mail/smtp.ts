@@ -4,11 +4,12 @@ import fs from "fs";
 import { logger } from "../log";
 import type { WebContents } from "electron";
 import type { LoginOption } from "@typings/index.d";
+import { logInImap } from "./imap";
 
 let transporter = null;
 let loginMail = "";
 
-export function loginSmtp(webContents, option: LoginOption) {
+export async function loginSmtp(webContents, option: LoginOption) {
   const { host, port, password, username, useSecure = false } = option;
   loginMail = username;
 
@@ -39,6 +40,22 @@ export function loginSmtp(webContents, option: LoginOption) {
         resolve({ type: "success", message: "login success" });
       }
     });
+  });
+}
+
+export async function loginImap(webContents, option: LoginOption) {
+  // 使用IMAP选项进行登录验证
+  const { imapHost, imapPort, imapPassword, imapUser, imapSecure } = option;
+  if (!imapHost || !imapPort || !imapPassword || !imapUser) {
+    return { type: "error", message: "IMAP配置不完整" };
+  }
+  
+  return await logInImap(webContents, {
+    host: imapHost,
+    port: imapPort,
+    password: imapPassword,
+    username: imapUser,
+    useSecure: imapSecure || false
   });
 }
 

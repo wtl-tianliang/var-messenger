@@ -5,7 +5,7 @@ import { app } from "electron";
 import { Sequelize } from "sequelize";
 import initHistoryTable from "./tables/LoginHistory";
 import loginMigrate from "./migrate/loginMigrate";
-export * from "./tables/LoginHistory";
+export { insertLogin, getLoginHistories } from "./tables/LoginHistory";
 export * from "./tables/LoginTable";
 
 const dbPath = path.join(app.getPath("userData"), "database.db");

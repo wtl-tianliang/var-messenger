@@ -3,16 +3,7 @@ import type { ParsedMail } from "mailparser";
 import { ImapFlow } from "imapflow";
 import { simpleParser } from "mailparser";
 import fs from "fs";
-
-const config = {
-  host: "imap.qq.com",
-  port: 993,
-  secure: true,
-  auth: {
-    user: "964817166@qq.com",
-    pass: "ppfixfgdzxiebdhe",
-  },
-};
+import type { WebContents } from "electron";
 
 const dir = "./mails";
 
@@ -22,10 +13,26 @@ if (!fs.existsSync(dir)) {
 
 let imap: ImapFlow | null = null;
 
-export function logInImap() {
+export function logInImap(webContents: WebContents, option: any) {
+  const { host, port, password, username, useSecure = false } = option;
   imap && imap.close();
+  const config = {
+    host: host,
+    port: port,
+    secure: useSecure,
+    auth: {
+      user: username,
+      pass: password,
+    },
+  };
   imap = new ImapFlow(config);
-  return imap.connect();
+  return new Promise((resolve) => {
+    imap.connect().then(() => {
+      resolve({ type: "success", message: "login success" });
+    }).catch((error) => {
+      resolve({ type: "error", message: error.message });
+    });
+  });
 }
 
 export function getBoxes() {
@@ -89,7 +96,17 @@ export async function downloadMail(
 
 export async function test() {
   try {
-    await logInImap();
+    // 创建一个空的webContents对象用于测试
+    const mockWebContents = {
+      send: () => {}
+    } as any;
+    await logInImap(mockWebContents, {
+      host: "imap.qq.com",
+      port: 993,
+      password: "ppfixfgdzxiebdhe",
+      username: "964817166@qq.com",
+      useSecure: true
+    });
     const boxes = await getBoxes();
     fs.writeFileSync(`${dir}/boxes.json`, JSON.stringify(boxes, null, 2));
 

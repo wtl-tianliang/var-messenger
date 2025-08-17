@@ -4,6 +4,11 @@ export type LoginOption = {
   password: string;
   username: string;
   useSecure: boolean;
+  imapHost?: string;
+  imapPort?: number;
+  imapUser?: string;
+  imapPassword?: string;
+  imapSecure?: boolean;
 };
 
 export type Config = {
