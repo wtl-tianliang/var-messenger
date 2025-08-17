@@ -105,7 +105,7 @@ export async function insertLogin(
   iamp_port: number = 0,
   iamp_user: string = "",
   iamp_password: string = "",
-  iamp_secure: number = 0
+  iamp_secure: number = 1
 ) {
   const res = await LoginHistory.create({
     smtp_url,

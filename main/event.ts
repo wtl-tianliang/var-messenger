@@ -226,8 +226,8 @@ ipcMain.handle("removeLogin", async (event, id) => {
 });
 
 ipcMain.handle("addLogin", async (event, data) => {
-  const { host, port, username, password, useSecure } = data;
-  await insertLogin(host, port, username, password, useSecure);
+  const { host, port, username, password, useSecure, imapHost, imapPort, imapUser, imapPassword, imapSecure } = data;
+  await insertLogin(host, port, username, password, useSecure, imapHost, imapPort, imapUser, imapPassword, imapSecure ? 1 : 0);
 });
 
 ipcMain.handle("verifyConnection", async (event, option) => {
