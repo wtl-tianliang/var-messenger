@@ -1,10 +1,12 @@
 <template>
-  <div class="home">
-    <p>hello world</p>
+  <div>
+    <pre>{{ route }}</pre>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useRoute } from "vue-router";
+const route = useRoute();
 </script>
 
 <style lang="scss" scoped></style>

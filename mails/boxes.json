@@ -1,0 +1,237 @@
+{
+  "root": true,
+  "folders": [
+    {
+      "name": "INBOX",
+      "flags": {},
+      "path": "INBOX",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/",
+      "specialUse": "\\Inbox"
+    },
+    {
+      "name": "Sent Messages",
+      "flags": {},
+      "path": "Sent Messages",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/",
+      "specialUse": "\\Sent"
+    },
+    {
+      "name": "Drafts",
+      "flags": {},
+      "path": "Drafts",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/",
+      "specialUse": "\\Drafts"
+    },
+    {
+      "name": "Junk",
+      "flags": {},
+      "path": "Junk",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/",
+      "specialUse": "\\Junk"
+    },
+    {
+      "name": "Deleted Messages",
+      "flags": {},
+      "path": "Deleted Messages",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/",
+      "specialUse": "\\Trash"
+    },
+    {
+      "name": "其他文件夹",
+      "flags": {},
+      "path": "其他文件夹",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/",
+      "folders": [
+        {
+          "name": "12306",
+          "flags": {},
+          "path": "其他文件夹/12306",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "阿里云",
+          "flags": {},
+          "path": "其他文件夹/阿里云",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "超星工作邮件",
+          "flags": {},
+          "path": "其他文件夹/超星工作邮件",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "掘金签到",
+          "flags": {},
+          "path": "其他文件夹/掘金签到",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "开发API推送",
+          "flags": {},
+          "path": "其他文件夹/开发API推送",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "拉勾网",
+          "flags": {},
+          "path": "其他文件夹/拉勾网",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "领英",
+          "flags": {},
+          "path": "其他文件夹/领英",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "墨刀团队",
+          "flags": {},
+          "path": "其他文件夹/墨刀团队",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "图灵社区",
+          "flags": {},
+          "path": "其他文件夹/图灵社区",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "邮件归档",
+          "flags": {},
+          "path": "其他文件夹/邮件归档",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "招商银行",
+          "flags": {},
+          "path": "其他文件夹/招商银行",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "招商银行信用卡",
+          "flags": {},
+          "path": "其他文件夹/招商银行信用卡",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "Boss简历",
+          "flags": {},
+          "path": "其他文件夹/Boss简历",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "Dribbble",
+          "flags": {},
+          "path": "其他文件夹/Dribbble",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "Github",
+          "flags": {},
+          "path": "其他文件夹/Github",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "origin",
+          "flags": {},
+          "path": "其他文件夹/origin",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "QQ邮件订阅",
+          "flags": {},
+          "path": "其他文件夹/QQ邮件订阅",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        },
+        {
+          "name": "SegmentFault社区",
+          "flags": {},
+          "path": "其他文件夹/SegmentFault社区",
+          "subscribed": true,
+          "listed": true,
+          "status": false,
+          "delimiter": "/"
+        }
+      ]
+    },
+    {
+      "name": "Mailspring",
+      "flags": {},
+      "path": "Mailspring",
+      "subscribed": true,
+      "listed": true,
+      "status": false,
+      "delimiter": "/"
+    }
+  ]
+}

@@ -1,12 +1,4 @@
 <template>
-  <div class="header">
-    <img src="@/assets/icon.png" class="logo" alt="logo" />
-    <span class="login">{{ currentLogin || "Var Messenger" }}</span>
-    <span v-if="currentLogin" class="quick-btn" @click="logout">注销</span>
-    <span class="quick-btn" @click="toAbout">关于</span>
-    <span class="quick-btn" @click="openLog">日志</span>
-    <span class="quick-btn" @click="openSetting">设置</span>
-  </div>
   <router-view v-slot="{ Component }">
     <component :is="Component"></component>
   </router-view>

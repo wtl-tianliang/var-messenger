@@ -8,7 +8,7 @@ import type { LoginOption } from "@typings/index.d";
 let transporter = null;
 let loginMail = "";
 
-export function verifyConnection(webContents, option: LoginOption) {
+export function loginSmtp(webContents, option: LoginOption) {
   const { host, port, password, username, useSecure = false } = option;
   loginMail = username;
 
@@ -84,7 +84,9 @@ export async function sendMail(letter, options = {}) {
   }
 
   try {
-    const res = await transporter.sendMail(option);
+    // const res = await transporter.sendMail(option);
+    console.log("sendMail", option);
+    const res = { response: "ok" };
     logger("send", { option, res });
     return { status: "success", message: res.response || "发送成功" };
   } catch (error) {

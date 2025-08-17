@@ -6,8 +6,8 @@
         <div class="mail-item" :class="[mail.status.toLowerCase(), { actived: previewHtml.key === mail.id }]"
           @click="viewContent(mail)">
           <div class="subject" :title="mail.subject">{{ mail.subject }}</div>
-          <div class="to">{{ mail.to }}</div>
-          <div class="cc" v-if="mail.cc">{{ mail.cc }}</div>
+          <div class="to" :title="mail.to">{{ mail.to }}</div>
+          <div class="cc" :title="mail.cc" v-if="mail.cc">{{ mail.cc }}</div>
           <el-tooltip :disabled="!mail.message" effect="dark" :content="mail.message" placement="right-start">
             <span class="status">{{ MAIL_STATUS_MAP[mail.status] }}</span>
           </el-tooltip>
@@ -33,11 +33,6 @@
       <div class="html" v-html="previewHtml.data.html"></div>
     </div>
   </div>
-  <Teleport to="#step-external">
-    <div class="operate-bar">
-      <el-button :disabled="blockOperate" round type="primary" @click="handleSendAll">全部发送</el-button>
-    </div>
-  </Teleport>
 </template>
 
 <script lang="ts" setup>
@@ -100,15 +95,22 @@ ipcRenderer.on("sendComplate", (event, { id, status, message }) => {
 onMounted(() => {
   getlist();
 });
+
+defineExpose({
+  next: handleSendAll,
+})
 </script>
 
 <style lang="scss" scoped>
 .preview-wrapper {
   display: flex;
-  height: calc(100% - 86px);
   .list-box {
     border-right: 1px solid #eee;
     width: 227px;
+    .header {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
   }
 }
 
@@ -118,7 +120,7 @@ onMounted(() => {
   flex: 1;
   width: 0;
   .header {
-    padding: 6px 10px;
+    padding: 15px;
     border-bottom: 1px solid #eee;
     background-color: #f5f5f5;
   }
@@ -179,6 +181,9 @@ onMounted(() => {
     .cc {
       color: #727d95;
       padding: 4px 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     &.mail_status_send_success {

@@ -5,6 +5,7 @@
     "composite": true,
     "module": "ESNext",
     "types": ["node"],
+    "sourceMap": true,
     "paths": {
       "@typings/*": ["./typings/*"],
     }

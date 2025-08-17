@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 import { ipcMain, shell } from "electron";
-import { sendMailForList, verifyConnection } from "./src/mail";
+import { sendMailForList, loginSmtp } from "./src/mail/smtp";
+import { test } from "./src/mail/imap";
 import { parseAttachments } from "./src/mail/utils";
 import { genDocx } from "./src/word/html2docx";
 import { parseExcel } from "./src/excel";
@@ -13,6 +14,8 @@ import { removeLogin, insertLogin, getLoginHistoies } from "./src/db";
 import { sendMessageToRender } from "./utils";
 import { logPath } from "./src/log";
 import { loadConfig, saveConfig } from "./src/configuration";
+
+test()
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -84,8 +87,8 @@ ipcMain.handle("parse-excel", (event, file) => {
   return data;
 });
 
-ipcMain.handle("verifyConnection", (event, option) => {
-  return verifyConnection(event.sender, option);
+ipcMain.handle("loginSmtp", (event, option) => {
+  return loginSmtp(event.sender, option);
 });
 
 ipcMain.handle("setForm", (event, data) => {
@@ -164,11 +167,11 @@ ipcMain.handle("generateMail", (event, data) => {
   };
 
   const wrapStyle = (html) => {
-    const config = loadConfig()
+    const config = loadConfig();
     const style = `.letter-content{font-family:${config.fontFamily};font-size:${config.fontSize}px;line-height:${config.lineHeight}}`;
     const result = `<div class="letter-content"><style>${style}</style>${html}</div>`;
-    return result
-  }
+    return result;
+  };
 
   defineData.forEach((rowData, rowIndex) => {
     if (isHasTitle && rowIndex === 0) {

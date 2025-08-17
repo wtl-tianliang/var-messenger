@@ -1,0 +1,664 @@
+[
+  {
+    "seq": 1,
+    "uid": 2906,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 21380,
+          "lineCount": 358
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 91433,
+          "lineCount": 1336
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "mk3-28c21945a4b34345bfdc66de71e9a287"
+      }
+    },
+    "envelope": {
+      "date": "2025-07-18T11:59:39.000Z",
+      "subject": "Hacker Newsletter #754",
+      "from": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<237053fd-6eb8-4ae3-b40f-5227756c3bd8@mtasv.net>"
+    },
+    "id": "5f16df28437757bbd54a4529d4b2f621"
+  },
+  {
+    "seq": 2,
+    "uid": 2907,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "base64",
+          "size": 3732,
+          "lineCount": 52
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "base64",
+          "size": 17384,
+          "lineCount": 236
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "----=_NextPart_687D97B4_10D24120_6979962F"
+      }
+    },
+    "envelope": {
+      "date": "2025-07-21T01:28:20.000Z",
+      "subject": "备案信息已提交管局通知",
+      "from": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<tencent_000C50D0A61D44E90D0EE041DB923B389306@qq.com>"
+    },
+    "id": "0197173c809d03f4ab81a9fe5c4b989a"
+  },
+  {
+    "seq": 3,
+    "uid": 2908,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 20867,
+          "lineCount": 424
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 88358,
+          "lineCount": 1296
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "mk3-f0a92f7119a54b44bd5e9f5e9511e826"
+      }
+    },
+    "envelope": {
+      "date": "2025-07-25T11:55:08.000Z",
+      "subject": "Hacker Newsletter #755",
+      "from": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<fbc0c04e-37eb-4671-9e9d-f11dfe18a42b@mtasv.net>"
+    },
+    "id": "2b1763b123cb7cdae7a45ed48df06d7f"
+  },
+  {
+    "seq": 4,
+    "uid": 2909,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 19277,
+          "lineCount": 336
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 67597,
+          "lineCount": 1037
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "mk3-549f7ccd11f54fccac95402e3e95245f"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-01T11:50:48.000Z",
+      "subject": "Hacker Newsletter #756",
+      "from": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<4066b46a-24e7-45b3-b009-b98dd9a719fd@mtasv.net>"
+    },
+    "id": "aaff995d15c4456447f57a74e3ca4d1f"
+  },
+  {
+    "seq": 6,
+    "uid": 2911,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "base64",
+          "size": 3834,
+          "lineCount": 53
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "base64",
+          "size": 19408,
+          "lineCount": 264
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "----=_NextPart_68905CF8_0FD6E000_0E12BEF9"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-04T07:10:48.000Z",
+      "subject": "腾讯云备案管局审核通过通知",
+      "from": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<tencent_58C342E8283F183C90FE0BC3B44A90786A09@qq.com>"
+    },
+    "id": "137e27105762dd09ba8f885db3343e83"
+  },
+  {
+    "seq": 7,
+    "uid": 2912,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "base64",
+          "size": 2918,
+          "lineCount": 41
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "base64",
+          "size": 12726,
+          "lineCount": 173
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "----=_NextPart_68905DF4_100EFDD0_7462F5B2"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-04T07:15:00.000Z",
+      "subject": "腾讯云网站备案信息复查结果通知！",
+      "from": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "腾讯云",
+          "address": "cloud_noreply@tencent.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<tencent_B415D3E50BBFC5D36195EC727F8BE4F0380A@qq.com>"
+    },
+    "id": "f841daf939cb906d2708b2c1d8207926"
+  },
+  {
+    "seq": 8,
+    "uid": 2913,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 19372,
+          "lineCount": 412
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 65921,
+          "lineCount": 1026
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "mk3-463b341c786b4fd9b52a243b36a223ad"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-08T12:34:14.000Z",
+      "subject": "Hacker Newsletter #757",
+      "from": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<aa135159-56c3-4062-9728-5e675eed91e9@mtasv.net>"
+    },
+    "id": "de3214650b43c333dc96808b81332aa2"
+  },
+  {
+    "seq": 9,
+    "uid": 2914,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 10355,
+          "lineCount": 181
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "utf-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 91648,
+          "lineCount": 1438
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "92f5672a70e9c8f60b454d3a784c86f9299bafde08473eec7c0c9bac3178"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-12T15:02:15.000Z",
+      "subject": "More models to use, Copilot coding agent, and more.",
+      "from": [
+        {
+          "name": "GitHub",
+          "address": "no-reply@github.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "GitHub",
+          "address": "no-reply@github.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "GitHub",
+          "address": "no-reply@github.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<Q_RuyBxoS7u0FIBATs-Vkg@geopod-ismtpd-5>"
+    },
+    "id": "c3f161ae91480e5f97f1f4b0314c04d0"
+  },
+  {
+    "seq": 10,
+    "uid": 2915,
+    "bodyStructure": {
+      "type": "text/html",
+      "parameters": {
+        "charset": "utf-8"
+      },
+      "encoding": "quoted-printable",
+      "size": 50111,
+      "lineCount": 751
+    },
+    "envelope": {
+      "date": "2025-08-12T23:08:09.000Z",
+      "subject": "The next evolution of v0 – now available",
+      "from": [
+        {
+          "name": "v0 Team",
+          "address": "ship@info.vercel.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "v0 Team",
+          "address": "ship@info.vercel.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "v0 Team",
+          "address": "ship@info.vercel.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<47MRE-Y5QQuGVwX2cY4wNA@geopod-ismtpd-6>"
+    },
+    "id": "3ea1d391930cd2e256ede1a17e642245"
+  },
+  {
+    "seq": 11,
+    "uid": 2916,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "childNodes": [
+            {
+              "part": "1.1",
+              "type": "text/html",
+              "parameters": {
+                "charset": "UTF-8"
+              },
+              "encoding": "quoted-printable",
+              "size": 164310,
+              "lineCount": 2356
+            }
+          ],
+          "type": "multipart/related",
+          "parameters": {
+            "boundary": "----=_Part_532207_537786586.1755129660373"
+          }
+        }
+      ],
+      "type": "multipart/mixed",
+      "parameters": {
+        "boundary": "----=_Part_532206_2026164833.1755129660373"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-14T00:01:00.000Z",
+      "subject": "天眼查-监控日报-2025.08.14",
+      "from": [
+        {
+          "name": "天眼查",
+          "address": "kfb@dmail1.tianyancha.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "天眼查",
+          "address": "kfb@dmail1.tianyancha.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "天眼查",
+          "address": "kfb@dmail1.tianyancha.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<1449079516.532209.1755129660586@tyc-enterprise-monitor-job-prod-f100-79d7566595-qlwfb>"
+    },
+    "id": "9d8198e7a36c6468829f5e8dfadeddbc"
+  },
+  {
+    "seq": 12,
+    "uid": 2917,
+    "bodyStructure": {
+      "childNodes": [
+        {
+          "part": "1",
+          "type": "text/plain",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 19769,
+          "lineCount": 332
+        },
+        {
+          "part": "2",
+          "type": "text/html",
+          "parameters": {
+            "charset": "UTF-8"
+          },
+          "encoding": "quoted-printable",
+          "size": 65997,
+          "lineCount": 1015
+        }
+      ],
+      "type": "multipart/alternative",
+      "parameters": {
+        "boundary": "mk3-b0fd139a226b4960a3600051b316dc4b"
+      }
+    },
+    "envelope": {
+      "date": "2025-08-15T13:38:23.000Z",
+      "subject": "Hacker Newsletter #758",
+      "from": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "sender": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "replyTo": [
+        {
+          "name": "Hacker Newsletter",
+          "address": "kale@hackernewsletter.com"
+        }
+      ],
+      "to": [
+        {
+          "name": "964817166",
+          "address": "964817166@qq.com"
+        }
+      ],
+      "messageId": "<30873a9b-800f-40c0-b1c6-0d5d37a7d3fa@mtasv.net>"
+    },
+    "id": "7fe0913e4836ecabc9baa58b50395901"
+  }
+]

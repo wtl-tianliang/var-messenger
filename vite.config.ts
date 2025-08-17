@@ -11,6 +11,7 @@ export default defineConfig({
   server: {
     open: false,
   },
+  esbuild: false,
   build: {
     rollupOptions: {
       external: ["pg-hstore"],

@@ -65,12 +65,6 @@
       </div>
       <editor class="content" v-model="form.html" :default-style="injectStyle"></editor>
     </div>
-
-    <Teleport to="#step-external">
-      <div class="operate-bar">
-        <el-button round type="primary" @click="toPreview">下一步</el-button>
-      </div>
-    </Teleport>
   </div>
 </template>
 
@@ -128,9 +122,13 @@ const toPreview = () => {
     return;
   }
   ipcRenderer.invoke("generateMail", JSON.stringify(form)).then((list) => {
-    router.push("/steps/preview");
+    router.push("/layout/write/preview");
   });
 };
+
+defineExpose({
+  next: toPreview,
+})
 </script>
 
 <script lang="ts">
@@ -142,6 +140,7 @@ export default {
 <style lang="scss" scoped>
 .editor-view {
   display: flex;
+  padding: 15px;
   .editor-panel {
     flex: 1;
     width: 0;

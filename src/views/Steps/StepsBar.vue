@@ -12,12 +12,12 @@
         </div>
       </template>
     </div>
-    <div id="step-external"></div>
+    <slot name="action" :index="currentStep" :total="steps.length - 1"></slot>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
@@ -27,11 +27,31 @@ type Step = {
   path: string;
   name: string;
   description: string;
-}
+};
+
+const currentStep = computed(() => {
+  return steps.value.findIndex((step) => step.path === route.path);
+});
+
 const steps = ref<Step[]>([
-  { icon: "iconfont icon-var", path: "/steps/definedata", name: "定义变量", description: "" },
-  { icon: "iconfont icon-mail", path: "/steps/editor", name: "编写邮件", description: "" },
-  { icon: "iconfont icon-send1", path: "/steps/preview", name: "预览发送", description: "" },
+  {
+    icon: "iconfont icon-var",
+    path: "/layout/write/definedata",
+    name: "定义变量",
+    description: "",
+  },
+  {
+    icon: "iconfont icon-mail",
+    path: "/layout/write/editor",
+    name: "编写邮件",
+    description: "",
+  },
+  {
+    icon: "iconfont icon-send1",
+    path: "/layout/write/preview",
+    name: "预览发送",
+    description: "",
+  },
 ]);
 
 function handleJump(step: Step) {
@@ -44,13 +64,15 @@ function handleJump(step: Step) {
   display: flex;
   border-bottom: 1px solid #ccc;
   background-color: #f5f7fa;
+  align-items: center;
+  padding-right: 15px;
   .content {
     display: flex;
     flex: 1;
   }
   .step-item {
     width: 120px;
-    height: 40px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,10 +84,12 @@ function handleJump(step: Step) {
     border-right: 1px solid transparent;
     &.active {
       position: relative;
-      border-left: 1px solid #ccc;
-      border-right: 1px solid #ccc;
       color: var(--main-color);
       background-color: #fff;
+      border-right: 1px solid #ccc;
+      &:not(:first-child) {
+        border-left: 1px solid #ccc;
+      }
       &::after {
         position: absolute;
         bottom: -1px;
@@ -81,9 +105,5 @@ function handleJump(step: Step) {
       font-size: 20px;
     }
   }
-}
-
-#step-external {
-  text-align: center;
 }
 </style>

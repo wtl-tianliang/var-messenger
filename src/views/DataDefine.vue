@@ -49,7 +49,7 @@
             }}</el-tag>
           </template>
           <template #reference>
-            <el-badge :value="vars.length">
+            <el-badge :value="vars.length" class="view-defined">
               <el-tag effect="plain">已定义变量</el-tag>
             </el-badge>
           </template>
@@ -57,12 +57,6 @@
       </div>
       <div class="data-grid" ref="datagridRef"></div>
     </div>
-
-    <Teleport to="#step-external">
-      <div class="operate-bar">
-        <el-button round type="primary" @click="toNext">下一步</el-button>
-      </div>
-    </Teleport>
   </div>
 </template>
 
@@ -216,11 +210,19 @@ function setVars() {
 }
 
 function toNext() {
-  router.push("/steps/editor");
+  router.push("/layout/write/editor");
 }
+
+defineExpose({
+  next: toNext,
+})
 </script>
 
 <style lang="scss" scoped>
+.container {
+  width: 100%;
+  height: 100%;
+}
 .uploader {
   margin: 40px;
   .description {
@@ -237,10 +239,9 @@ function toNext() {
   display: flex;
   flex-direction: column;
   .header {
-    margin-bottom: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    padding: 10px 15px 7px 15px;
   }
   .front {
     display: inherit;
@@ -248,6 +249,10 @@ function toNext() {
     & > *:not(:first-child) {
       margin-left: 8px;
     }
+  }
+  .view-defined {
+    margin-left: auto;
+    transform: translateX(-10px);
   }
   .data-grid {
     flex: 1;
