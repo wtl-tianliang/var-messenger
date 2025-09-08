@@ -9,7 +9,11 @@ import { v4 as uuid } from "uuid";
 import MAIL_STATUS from "../MAIL_STATUS.js";
 import * as path from "path";
 import fs from "fs";
-import { removeLogin, insertLogin, getLoginHistoies } from "./src/db";
+import {
+  deleteLoginHistory,
+  insertLoginHistory,
+  getLoginHistoies,
+} from "./src/db";
 import { sendMessageToRender } from "./utils";
 import { logPath } from "./src/log";
 import { loadConfig, saveConfig } from "./src/configuration";
@@ -164,11 +168,11 @@ ipcMain.handle("generateMail", (event, data) => {
   };
 
   const wrapStyle = (html) => {
-    const config = loadConfig()
+    const config = loadConfig();
     const style = `.letter-content{font-family:${config.fontFamily};font-size:${config.fontSize}px;line-height:${config.lineHeight}}`;
     const result = `<div class="letter-content"><style>${style}</style>${html}</div>`;
-    return result
-  }
+    return result;
+  };
 
   defineData.forEach((rowData, rowIndex) => {
     if (isHasTitle && rowIndex === 0) {
@@ -219,12 +223,27 @@ ipcMain.handle("getLogin", async (event) => {
 });
 
 ipcMain.handle("removeLogin", async (event, id) => {
-  await removeLogin(id);
+  await deleteLoginHistory(id);
 });
 
 ipcMain.handle("addLogin", async (event, data) => {
-  const { host, port, username, password, useSecure } = data;
-  await insertLogin(host, port, username, password, useSecure);
+  const { host: smtp_url, port: smtp_port, useSecure: smtp_secure } = data;
+  const { username: smtp_user, password: smtp_pass } = data;
+
+  const { iamp_url = "", iamp_port = 993, iamp_secure = 1 } = data;
+  const { iamp_user = "", iamp_password = "" } = data;
+  await insertLoginHistory(
+    smtp_url,
+    smtp_port,
+    smtp_user,
+    smtp_pass,
+    smtp_secure,
+    iamp_url,
+    iamp_port,
+    iamp_user,
+    iamp_password,
+    iamp_secure
+  );
 });
 
 ipcMain.handle("openLogdir", () => {
