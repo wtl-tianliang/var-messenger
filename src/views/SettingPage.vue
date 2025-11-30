@@ -39,6 +39,9 @@
         <el-form-item label="行高">
           <el-input-number v-model="form.lineHeight"></el-input-number>
         </el-form-item>
+        <el-form-item label="发送间隔(秒)">
+          <el-input-number v-model="form.countdownSeconds" :min="0" :max="300" placeholder="默认5秒"></el-input-number>
+        </el-form-item>
       </el-form>
     </div>
   </div>

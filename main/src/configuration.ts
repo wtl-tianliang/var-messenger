@@ -10,6 +10,7 @@ export function getDefaultConfig(): Config {
     fontFamily: ["宋体", "times new roman"],
     fontSize: 16,
     lineHeight: 1.1,
+    countdownSeconds: 5,
   };
 }
 

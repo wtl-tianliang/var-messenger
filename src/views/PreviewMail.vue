@@ -8,6 +8,9 @@
           <div class="subject" :title="mail.subject">{{ mail.subject }}</div>
           <div class="to">{{ mail.to }}</div>
           <div class="cc" v-if="mail.cc">{{ mail.cc }}</div>
+          <div class="countdown" v-if="countdowns[mail.id] > 0">
+            倒计时: {{ countdowns[mail.id] }}s
+          </div>
           <el-tooltip :disabled="!mail.message" effect="dark" :content="mail.message" placement="right-start">
             <span class="status">{{ MAIL_STATUS_MAP[mail.status] }}</span>
           </el-tooltip>
@@ -53,6 +56,8 @@ const previewHtml = reactive<{ key: number; data: any }>({
   key: Date.now(),
   data: {},
 });
+// 倒计时状态
+const countdowns = reactive<Record<string, number>>({});
 
 function getlist() {
   ipcRenderer.invoke("getLetters").then(({ letters, contentAsDocx }) => {
@@ -95,6 +100,27 @@ ipcRenderer.on("sendComplate", (event, { id, status, message }) => {
       ? MAIL_STATUS.MAIL_STATUS_SEND_SUCCESS
       : MAIL_STATUS.MAIL_STATUS_SEND_FAIL;
   letter.message = message;
+});
+
+// 监听倒计时开始事件
+ipcRenderer.on("sendStartCountdown", (event, { id, countdown }) => {
+  if (countdown > 0) {
+    countdowns[id] = countdown;
+  }
+});
+
+// 监听倒计时更新事件
+ipcRenderer.on("sendUpdateCountdown", (event, { id, countdown }) => {
+  if (countdown <= 0) {
+    const letter = list.value.find((item: any) => item.id === id);
+    if (letter) {
+      letter.status = MAIL_STATUS.MAIL_STATUS_SENDING;
+    }
+    // 倒计时结束，删除该状态
+    delete countdowns[id];
+  } else {
+    countdowns[id] = countdown;
+  }
 });
 
 onMounted(() => {
@@ -179,6 +205,10 @@ onMounted(() => {
     .cc {
       color: #727d95;
       padding: 4px 0;
+    }
+    .countdown {
+      color: #f56c6c;
+      font-weight: bold;
     }
 
     &.mail_status_send_success {

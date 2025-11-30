@@ -12,4 +12,5 @@ export type Config = {
   fontSize?: number;
   fontFamily?: string[];
   lineHeight?: number;
+  countdownSeconds?: number;
 }

@@ -89,14 +89,15 @@ export async function sendMail(letter, options = {}) {
     return { status: "success", message: res.response || "发送成功" };
   } catch (error) {
     logger("send", { option, error });
-    throw { status: "fail", messge: error.message || "未知异常" };
+    throw { status: "fail", message: error.response || error.message  || "未知异常" };
   }
 }
 
 export function sendMailForList(
   webContents: WebContents,
   mailList,
-  contentToDocx: boolean = false
+  contentToDocx: boolean = false,
+  countdownSeconds: number = 5
 ): Promise<void> {
   mailList = cloneDeep(mailList);
   return new Promise((resolve) => {
@@ -108,8 +109,26 @@ export function sendMailForList(
       const option = mailList.shift();
 
       try {
-        const res = await sendMail(option, { contentToDocx });
-        webContents.send("sendComplate", { id: option.id, ...res });
+        // 通知前端开始倒计时
+        webContents.send("sendStartCountdown", { id: option.id, countdown: countdownSeconds });
+        
+// 使用递归方式实现倒计时
+        const countdown = async (seconds: number) => {
+          if (seconds <= 0) {
+            // 倒计时结束，发送更新事件
+            webContents.send("sendUpdateCountdown", { id: option.id, countdown: 0 });
+            const res: any = await sendMail(option, { contentToDocx });
+            webContents.send("sendComplate", { id: option.id, ...res });
+            return;
+          }
+          
+          // 每秒通知前端更新倒计时
+          webContents.send("sendUpdateCountdown", { id: option.id, countdown: seconds });
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          await countdown(seconds - 1);
+        };
+        
+        await countdown(countdownSeconds);
       } catch (err) {
         webContents.send("sendComplate", {
           id: option.id,
