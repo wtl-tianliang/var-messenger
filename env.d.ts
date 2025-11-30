@@ -1,4 +1,8 @@
 declare module "wangeditor-plugin-var";
+declare module "*.md?raw" {
+  const content: string;
+  export default content;
+}
 declare interface Window {
   tinymce: any,
   ipcRenderer: {

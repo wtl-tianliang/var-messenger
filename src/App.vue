@@ -10,12 +10,14 @@
   <router-view v-slot="{ Component }">
     <component :is="Component"></component>
   </router-view>
+  <TermsDialog />
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import TermsDialog from "@/components/TermsDialog.vue";
 
 const ipcRenderer = window.ipcRenderer
 const currentLogin = ref("");
