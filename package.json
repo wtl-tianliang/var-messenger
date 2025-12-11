@@ -1,6 +1,6 @@
 {
   "name": "var-messenger",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "Use variables to send mail in batches",
   "author": "oddtools.cn",
   "private": true,
