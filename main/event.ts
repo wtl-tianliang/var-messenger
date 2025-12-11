@@ -216,7 +216,7 @@ ipcMain.handle("sendByIds", async (event, ids) => {
   const list = letters.filter((item) => ids.includes(item.id));
   // 获取配置的倒计时时间
   const config = loadConfig();
-  const countdownSeconds = config.countdownSeconds || 5;
+  const countdownSeconds = config.countdownSeconds ?? 5;
   await sendMailForList(event.sender, list, form.contentAsDocx, countdownSeconds);
 });
 
